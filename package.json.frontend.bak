@@ -1,0 +1,19 @@
+{
+  "name": "sruput-nyam-web",
+  "version": "1.0.0",
+  "description": "Website Resmi Sruput & Nyam - Es Jeruk & Salad Bowl",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx -y serve . -p 3000",
+    "dev": "npx -y serve . -p 3000"
+  },
+  "keywords": [
+    "food",
+    "delivery",
+    "es-jeruk",
+    "salad",
+    "e-commerce"
+  ],
+  "author": "Sruput & Nyam Team",
+  "license": "MIT"
+}
