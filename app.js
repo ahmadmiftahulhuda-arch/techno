@@ -2,7 +2,7 @@
    SRUPUT & NYAM - F&B HQ Store Analytics & Management Engine
    Interactive chart tooltips, KPI date filtering, view tab switching,
    product progress bars recalculation, report exporter, search filter,
-   Menu CRUD, Digital Receipts POS, KDS Kitchen Display System, Staff Manager.
+   Menu CRUD, Digital Receipts POS, KDS Kitchen Display System, Staff Manager, Manager Profile Editor.
    ========================================================================== */
 
 // Chart Data per Day (Matching reference image)
@@ -24,6 +24,15 @@ let menuCatalog = [
   { id: "kopi-aren", name: "Es Kopi Susu Aren", category: "Sruput Beverage", price: 20000, stock: "Tersedia", sales: 89, image: "images/mango.png" },
   { id: "tahu-cabe-garam", name: "Tahu Cabe Garam", category: "Nyam Salad", price: 18000, stock: "Tersedia", sales: 64, image: "images/watermelon.png" }
 ];
+
+// Manager Profile Object
+let managerProfile = {
+  name: "Rizka Ika Maulida",
+  role: "Store Manager & Kitchen Lead",
+  email: "rizka.ika@mhs.politala.ac.id",
+  phone: "0812-9876-5432",
+  avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
+};
 
 // Active KDS Orders Queue
 let activeOrders = [
@@ -242,7 +251,44 @@ function toggleStoreFrontView() {
 }
 
 /* ==========================================
-   4. MENU MANAGEMENT CRUD
+   4. EDIT MANAGER PROFILE ENGINE
+   ========================================== */
+
+function openEditProfileModal() {
+  document.getElementById("profileNameInput").value = managerProfile.name;
+  document.getElementById("profileRoleInput").value = managerProfile.role;
+  document.getElementById("profileEmailInput").value = managerProfile.email;
+  document.getElementById("profilePhoneInput").value = managerProfile.phone;
+  document.getElementById("profileImageInput").value = managerProfile.avatarUrl;
+  document.getElementById("profilePreviewImg").src = managerProfile.avatarUrl;
+
+  const modal = document.getElementById("editProfileModal");
+  if (modal) modal.classList.add("active");
+}
+
+function closeEditProfileModal() {
+  const modal = document.getElementById("editProfileModal");
+  if (modal) modal.classList.remove("active");
+}
+
+function handleSaveProfileForm(e) {
+  e.preventDefault();
+  managerProfile.name = document.getElementById("profileNameInput").value;
+  managerProfile.role = document.getElementById("profileRoleInput").value;
+  managerProfile.email = document.getElementById("profileEmailInput").value;
+  managerProfile.phone = document.getElementById("profilePhoneInput").value;
+  managerProfile.avatarUrl = document.getElementById("profileImageInput").value;
+
+  // Update topbar avatar photo
+  const topbarAvatar = document.getElementById("topbarAvatarImg");
+  if (topbarAvatar) topbarAvatar.src = managerProfile.avatarUrl;
+
+  closeEditProfileModal();
+  showToast(`Profil Manajer (${managerProfile.name}) berhasil diperbarui!`);
+}
+
+/* ==========================================
+   5. MENU MANAGEMENT CRUD
    ========================================== */
 
 function filterMenuCategory(cat, el) {
@@ -370,7 +416,7 @@ function deleteMenuItem(id) {
 }
 
 /* ==========================================
-   5. KDS & ORDERS RECEIPT ENGINE
+   6. KDS & ORDERS RECEIPT ENGINE
    ========================================== */
 
 function renderKdsOrders() {
@@ -504,7 +550,7 @@ function simulatePrintReceipt(orderId) {
 }
 
 /* ==========================================
-   6. STAFF MANAGEMENT ENGINE
+   7. STAFF MANAGEMENT ENGINE
    ========================================== */
 
 function renderStaffTable() {
@@ -558,7 +604,7 @@ function deleteStaff(id) {
 }
 
 /* ==========================================
-   7. STORE FRONT CATALOG RENDERER
+   8. STORE FRONT CATALOG RENDERER
    ========================================== */
 
 function renderStoreFrontCatalog() {
@@ -579,7 +625,7 @@ function renderStoreFrontCatalog() {
 }
 
 /* ==========================================
-   8. NEW REPORT MODAL & DOWNLOAD SIMULATOR
+   9. NEW REPORT MODAL & DOWNLOAD SIMULATOR
    ========================================== */
 
 function openNewReportModal() {
@@ -606,7 +652,7 @@ function saveStoreSettings(e) {
 }
 
 /* ==========================================
-   9. GLOBAL SEARCH FUNCTION
+   10. GLOBAL SEARCH FUNCTION
    ========================================== */
 
 function handleHqSearch(query) {
@@ -615,7 +661,7 @@ function handleHqSearch(query) {
 }
 
 /* ==========================================
-   10. TOAST NOTIFICATION ENGINE
+   11. TOAST NOTIFICATION ENGINE
    ========================================== */
 
 function showToast(message) {

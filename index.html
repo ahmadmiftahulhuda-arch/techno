@@ -125,8 +125,8 @@
           </button>
 
           <!-- Profile User Avatar -->
-          <div class="hq-user-profile" title="Profil Manajer">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Avatar Pengguna" class="hq-avatar-img">
+          <div class="hq-user-profile" title="Klik untuk Edit Profil Manajer" onclick="openEditProfileModal()">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Avatar Pengguna" class="hq-avatar-img" id="topbarAvatarImg">
           </div>
 
         </div>
@@ -752,6 +752,52 @@
             </select>
           </div>
           <button type="submit" class="btn-solid-brown-sm" style="width: 100%; padding: 0.75rem;"><i class="fa-solid fa-user-check"></i> Tambah Staf</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL 5: EDIT PROFILE MANAGER MODAL -->
+  <div class="modal-overlay" id="editProfileModal">
+    <div class="modal-card" style="max-width: 460px;">
+      <div class="modal-header-sticky">
+        <h3 class="modal-title"><i class="fa-solid fa-id-card"></i> Edit Profil Manajer</h3>
+        <button class="btn-close-modal" onclick="closeEditProfileModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body-wrapper" style="padding: 1.25rem;">
+        <form onsubmit="handleSaveProfileForm(event)">
+          <div style="text-align: center; margin-bottom: 1rem;">
+            <img id="profilePreviewImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Preview Foto Profil" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #782E00; margin: 0 auto 0.5rem;">
+            <p style="font-size: 0.75rem; color: #64748B;">Foto Profil Manajer Aktif</p>
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">Nama Lengkap Manajer</label>
+            <input type="text" class="input-select-sm" id="profileNameInput" required style="width: 100%; padding: 0.6rem;" value="Rizka Ika Maulida">
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">Jabatan / Peran</label>
+            <input type="text" class="input-select-sm" id="profileRoleInput" required style="width: 100%; padding: 0.6rem;" value="Store Manager & Kitchen Lead">
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">Email Akun</label>
+            <input type="email" class="input-select-sm" id="profileEmailInput" required style="width: 100%; padding: 0.6rem;" value="rizka.ika@mhs.politala.ac.id">
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">Nomor WhatsApp</label>
+            <input type="text" class="input-select-sm" id="profilePhoneInput" style="width: 100%; padding: 0.6rem;" value="0812-9876-5432">
+          </div>
+
+          <div style="margin-bottom: 1.25rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">URL Foto Profil</label>
+            <input type="text" class="input-select-sm" id="profileImageInput" style="width: 100%; padding: 0.6rem;" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" oninput="document.getElementById('profilePreviewImg').src = this.value">
+          </div>
+
+          <button type="submit" class="btn-solid-brown-sm" style="width: 100%; padding: 0.75rem;"><i class="fa-solid fa-floppy-disk"></i> Simpan Profil</button>
         </form>
       </div>
     </div>
