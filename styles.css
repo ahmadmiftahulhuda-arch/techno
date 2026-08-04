@@ -1,7 +1,7 @@
 /* ==========================================================================
    SRUPUT & NYAM - F&B HQ Dashboard & Analytics Stylesheet
    Matching exact UI screenshot: Modern dark-brown & orange theme, smooth SVG charts,
-   KPI cards, donut ring chart, top selling products progress bars, and mobile safeguards.
+   KPI cards, donut ring chart, top selling products progress bars, KDS display, and digital receipts.
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap');
@@ -826,6 +826,77 @@ button:active {
 .bar-fill-3 { background: var(--hq-brown-medium); }
 .bar-fill-4 { background: #B08265; }
 .bar-fill-5 { background: #D9C3B0; }
+
+/* KDS KITCHEN DISPLAY CARDS GRID */
+.kds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.kds-card {
+  background: #FFF;
+  border: 1px solid var(--hq-border);
+  border-radius: 14px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.kds-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.kds-order-id {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--hq-brown-dark);
+}
+
+.kds-items-list {
+  font-size: 0.82rem;
+  color: #334155;
+  margin-bottom: 0.85rem;
+  line-height: 1.4;
+}
+
+.btn-solid-brown-sm {
+  padding: 0.45rem 0.85rem;
+  background: var(--hq-brown-dark);
+  color: #FFF;
+  font-weight: 700;
+  font-size: 0.78rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-solid-brown-sm:hover {
+  background: var(--hq-brown-medium);
+}
+
+.pill-filter-item {
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: #F1F5F9;
+  color: #475569;
+  border: none;
+  cursor: pointer;
+}
+
+.pill-filter-item.active {
+  background: var(--hq-brown-dark);
+  color: #FFF;
+}
 
 /* MODAL OVERLAY & CARD STYLES */
 .modal-overlay {

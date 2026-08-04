@@ -1,7 +1,8 @@
 /* ==========================================================================
    SRUPUT & NYAM - F&B HQ Store Analytics & Management Engine
    Interactive chart tooltips, KPI date filtering, view tab switching,
-   product progress bars recalculation, report exporter, and search filter.
+   product progress bars recalculation, report exporter, search filter,
+   Menu CRUD, Digital Receipts POS, KDS Kitchen Display System, Staff Manager.
    ========================================================================== */
 
 // Chart Data per Day (Matching reference image)
@@ -21,13 +22,31 @@ let menuCatalog = [
   { id: "gourmet-salad", name: "Gourmet Salad Bowl", category: "Nyam Salad", price: 35000, stock: "Tersedia", sales: 145, image: "images/salad.png" },
   { id: "combo-ayam", name: "Paket Combo Ayam", category: "Paket Combo", price: 45000, stock: "Tersedia", sales: 112, image: "images/combo.png" },
   { id: "kopi-aren", name: "Es Kopi Susu Aren", category: "Sruput Beverage", price: 20000, stock: "Tersedia", sales: 89, image: "images/mango.png" },
-  { id: "tahu-cabe-garam", name: "Tahu Cabe Garam", category: "Nyam Snack", price: 18000, stock: "Tersedia", sales: 64, image: "images/watermelon.png" }
+  { id: "tahu-cabe-garam", name: "Tahu Cabe Garam", category: "Nyam Salad", price: 18000, stock: "Tersedia", sales: 64, image: "images/watermelon.png" }
 ];
+
+// Active KDS Orders Queue
+let activeOrders = [
+  { id: "SN-892101", customer: "Ahmad Miftah (Meja 04)", items: [{ name: "2x Es Jeruk Peras Original", price: 30000 }, { name: "1x Gourmet Salad Bowl", price: 35000 }], total: 65000, method: "QRIS", status: "Diproses", time: "14:15 WIB" },
+  { id: "SN-892102", customer: "Siti Rahma (Takeaway)", items: [{ name: "1x Mango Juice", price: 28000 }, { name: "1x Tropical Fruit Bowl", price: 38000 }], total: 66000, method: "Cash", status: "Siap", time: "14:20 WIB" },
+  { id: "SN-892103", customer: "Budi Santoso (Delivery)", items: [{ name: "1x Green Detox Combo", price: 55000 }], total: 55000, method: "Bank Transfer", status: "Diproses", time: "14:25 WIB" }
+];
+
+// Staff List
+let staffList = [
+  { id: "stf-1", name: "Ahmad Miftahul Huda", role: "Store Manager", shift: "Pagi (08.00 - 16.00)", status: "Aktif" },
+  { id: "stf-2", name: "Riska Ika Maulida", role: "Head Barista & Kitchen Lead", shift: "Pagi (08.00 - 16.00)", status: "Aktif" },
+  { id: "stf-3", name: "Budi Setiawan", role: "Kasir / Frontend POS", shift: "Siang (12.00 - 20.00)", status: "Aktif" }
+];
+
+let currentMenuCategoryFilter = "all";
 
 // Initial Setup
 document.addEventListener("DOMContentLoaded", () => {
   renderMenuMgmtTable();
   renderOrdersTable();
+  renderKdsOrders();
+  renderStaffTable();
   renderStoreFrontCatalog();
   
   // Set default active day to Saturday (Index 5) as shown in image
@@ -42,7 +61,6 @@ function setChartActiveDay(index) {
   const data = DAILY_TREND_DATA[index];
   if (!data) return;
 
-  // Move SVG dot & line
   const activeDot = document.getElementById("activeChartDot");
   const guideLine = document.getElementById("activeGuideLine");
   const tooltip = document.getElementById("chartTooltip");
@@ -64,7 +82,6 @@ function setChartActiveDay(index) {
   }
 
   if (tooltip) {
-    // Map SVG cx coordinates (0 to 540) to pixel position
     const wrapper = document.getElementById("trendChartWrapper");
     if (wrapper) {
       const wrapperWidth = wrapper.offsetWidth || 500;
@@ -76,7 +93,6 @@ function setChartActiveDay(index) {
     }
   }
 
-  // Highlight X-axis day text
   const xLabels = document.querySelectorAll("#xAxisLabels span");
   xLabels.forEach((span, i) => {
     if (i === index) {
@@ -93,12 +109,9 @@ function setChartActiveDay(index) {
 
 function toggleDateFilterMenu() {
   const menu = document.getElementById("dateFilterMenu");
-  if (menu) {
-    menu.classList.toggle("show");
-  }
+  if (menu) menu.classList.toggle("show");
 }
 
-// Close dropdown on outside click
 document.addEventListener("click", (e) => {
   const dateBtn = document.getElementById("dateFilterBtn");
   const dateMenu = document.getElementById("dateFilterMenu");
@@ -108,11 +121,9 @@ document.addEventListener("click", (e) => {
 });
 
 function selectDateRange(rangeText, el) {
-  // Update button label
   const label = document.getElementById("selectedDateLabel");
   if (label) label.textContent = rangeText;
 
-  // Update active state in dropdown
   const items = document.querySelectorAll("#dateFilterMenu .dropdown-item");
   items.forEach(item => item.classList.remove("active"));
   if (el) el.classList.add("active");
@@ -120,7 +131,6 @@ function selectDateRange(rangeText, el) {
   const menu = document.getElementById("dateFilterMenu");
   if (menu) menu.classList.remove("show");
 
-  // Recalculate KPIs based on date filter
   const valOmzet = document.getElementById("valTotalOmzet");
   const valTrx = document.getElementById("valTotalTransaksi");
   const valRata = document.getElementById("valRataRata");
@@ -180,7 +190,6 @@ function updateProgressBars(c1, c2, c3, c4, c5) {
    ========================================== */
 
 function switchHqTab(tabName, clickedEl) {
-  // Update sidebar menu highlight
   const items = document.querySelectorAll(".hq-nav-item");
   items.forEach(item => {
     if (item.getAttribute("data-tab") === tabName) {
@@ -190,7 +199,6 @@ function switchHqTab(tabName, clickedEl) {
     }
   });
 
-  // Map tab name to pane ID
   const map = {
     "dashboard": "paneDashboard",
     "menu-mgmt": "paneMenuMgmt",
@@ -212,7 +220,6 @@ function switchHqTab(tabName, clickedEl) {
     }
   });
 
-  // Close mobile sidebar if open
   const sidebar = document.getElementById("hqSidebar");
   if (sidebar) sidebar.classList.remove("mobile-open");
 }
@@ -221,10 +228,6 @@ function toggleHqSidebar() {
   const sidebar = document.getElementById("hqSidebar");
   if (sidebar) sidebar.classList.toggle("mobile-open");
 }
-
-/* ==========================================
-   4. STOREFRONT OVERLAY TOGGLE
-   ========================================== */
 
 function toggleStoreFrontView() {
   const overlay = document.getElementById("storefrontOverlay");
@@ -239,14 +242,27 @@ function toggleStoreFrontView() {
 }
 
 /* ==========================================
-   5. MENU MANAGEMENT TABLE RENDERER
+   4. MENU MANAGEMENT CRUD
    ========================================== */
+
+function filterMenuCategory(cat, el) {
+  currentMenuCategoryFilter = cat;
+  const pills = document.querySelectorAll(".hq-filter-pills-row .pill-filter-item");
+  pills.forEach(p => p.classList.remove("active"));
+  if (el) el.classList.add("active");
+  renderMenuMgmtTable();
+}
 
 function renderMenuMgmtTable() {
   const tbody = document.getElementById("menuMgmtTableBody");
   if (!tbody) return;
 
-  tbody.innerHTML = menuCatalog.map(item => `
+  let filtered = menuCatalog;
+  if (currentMenuCategoryFilter !== "all") {
+    filtered = menuCatalog.filter(m => m.category === currentMenuCategoryFilter);
+  }
+
+  tbody.innerHTML = filtered.map(item => `
     <tr>
       <td>
         <img src="${item.image}" alt="${item.name}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 8px;">
@@ -254,38 +270,153 @@ function renderMenuMgmtTable() {
       <td><strong>${item.name}</strong></td>
       <td>${item.category}</td>
       <td><strong>Rp ${item.price.toLocaleString('id-ID')}</strong></td>
-      <td><span class="badge-fin-type type-pemasukan">${item.stock}</span></td>
       <td>
-        <button class="btn-solid-brown-sm" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" onclick="editMenuItem('${item.id}')">Edit</button>
+        <button class="badge-fin-type ${item.stock === 'Tersedia' ? 'type-pemasukan' : 'type-pengeluaran'}" 
+                onclick="toggleMenuStockStatus('${item.id}')" style="cursor: pointer; border: none;">
+          ${item.stock}
+        </button>
+      </td>
+      <td>
+        <div style="display: flex; gap: 0.35rem;">
+          <button class="btn-solid-brown-sm" style="padding: 0.3rem 0.65rem; font-size: 0.72rem;" onclick="openEditMenuModal('${item.id}')">Edit</button>
+          <button class="btn-solid-brown-sm" style="padding: 0.3rem 0.65rem; font-size: 0.72rem; background: #DC2626;" onclick="deleteMenuItem('${item.id}')">Hapus</button>
+        </div>
       </td>
     </tr>
   `).join("");
 }
 
 function openAddMenuModal() {
-  showToast("Fitur Tambah Menu Baru siap digunakan!");
+  document.getElementById("menuFormId").value = "";
+  document.getElementById("menuFormTitle").value = "";
+  document.getElementById("menuFormCategory").value = "Sruput Juice";
+  document.getElementById("menuFormPrice").value = "";
+  document.getElementById("menuFormStock").value = "Tersedia";
+  document.getElementById("menuFormImage").value = "images/es_jeruk.png";
+  document.getElementById("addMenuModalTitle").innerHTML = `<i class="fa-solid fa-utensils"></i> Tambah Menu Baru`;
+  
+  const modal = document.getElementById("addMenuModal");
+  if (modal) modal.classList.add("active");
 }
 
-function editMenuItem(id) {
+function openEditMenuModal(id) {
+  const item = menuCatalog.find(m => m.id === id);
+  if (!item) return;
+
+  document.getElementById("menuFormId").value = item.id;
+  document.getElementById("menuFormTitle").value = item.name;
+  document.getElementById("menuFormCategory").value = item.category;
+  document.getElementById("menuFormPrice").value = item.price;
+  document.getElementById("menuFormStock").value = item.stock;
+  document.getElementById("menuFormImage").value = item.image;
+  document.getElementById("addMenuModalTitle").innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Edit Menu`;
+
+  const modal = document.getElementById("addMenuModal");
+  if (modal) modal.classList.add("active");
+}
+
+function closeAddMenuModal() {
+  const modal = document.getElementById("addMenuModal");
+  if (modal) modal.classList.remove("active");
+}
+
+function handleSaveMenuForm(e) {
+  e.preventDefault();
+  const id = document.getElementById("menuFormId").value;
+  const name = document.getElementById("menuFormTitle").value;
+  const category = document.getElementById("menuFormCategory").value;
+  const price = parseInt(document.getElementById("menuFormPrice").value) || 0;
+  const stock = document.getElementById("menuFormStock").value;
+  const image = document.getElementById("menuFormImage").value;
+
+  if (id) {
+    const existing = menuCatalog.find(m => m.id === id);
+    if (existing) {
+      existing.name = name;
+      existing.category = category;
+      existing.price = price;
+      existing.stock = stock;
+      existing.image = image;
+    }
+    showToast(`Menu "${name}" berhasil diperbarui!`);
+  } else {
+    const newId = `menu-${Date.now()}`;
+    menuCatalog.unshift({ id: newId, name, category, price, stock, sales: 0, image });
+    showToast(`Menu baru "${name}" berhasil ditambahkan!`);
+  }
+
+  closeAddMenuModal();
+  renderMenuMgmtTable();
+  renderStoreFrontCatalog();
+}
+
+function toggleMenuStockStatus(id) {
   const item = menuCatalog.find(m => m.id === id);
   if (item) {
-    showToast(`Mengedit: ${item.name}`);
+    item.stock = item.stock === "Tersedia" ? "Habis" : "Tersedia";
+    renderMenuMgmtTable();
+    showToast(`Status stok ${item.name} diubah menjadi: ${item.stock}`);
+  }
+}
+
+function deleteMenuItem(id) {
+  const item = menuCatalog.find(m => m.id === id);
+  if (item && confirm(`Apakah Anda yakin ingin menghapus menu "${item.name}"?`)) {
+    menuCatalog = menuCatalog.filter(m => m.id !== id);
+    renderMenuMgmtTable();
+    renderStoreFrontCatalog();
+    showToast(`Menu ${item.name} berhasil dihapus.`);
   }
 }
 
 /* ==========================================
-   6. ORDERS TABLE RENDERER
+   5. KDS & ORDERS RECEIPT ENGINE
    ========================================== */
+
+function renderKdsOrders() {
+  const container = document.getElementById("kdsOrdersContainer");
+  if (!container) return;
+
+  container.innerHTML = activeOrders.map(order => `
+    <div class="kds-card">
+      <div>
+        <div class="kds-card-head">
+          <span class="kds-order-id">${order.id}</span>
+          <span class="badge-fin-type ${order.status === 'Siap' ? 'type-pemasukan' : 'type-pengeluaran'}">${order.status}</span>
+        </div>
+        <p style="font-size: 0.78rem; font-weight: 700; color: #64748B; margin-bottom: 0.5rem;">${order.customer} • ${order.time}</p>
+        <div class="kds-items-list">
+          ${order.items.map(i => `<div>• ${i.name}</div>`).join("")}
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; border-top: 1px solid #F1F5F9; padding-top: 0.5rem;">
+        <span style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.95rem; color: #782E00;">Rp ${order.total.toLocaleString('id-ID')}</span>
+        <button class="btn-solid-brown-sm" onclick="advanceKdsStatus('${order.id}')">
+          ${order.status === 'Diproses' ? 'Tandai Siap' : 'Selesaikan'}
+        </button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function advanceKdsStatus(orderId) {
+  const order = activeOrders.find(o => o.id === orderId);
+  if (order) {
+    if (order.status === "Diproses") {
+      order.status = "Siap";
+      showToast(`Pesanan ${order.id} ditandai SIAP disajikan!`);
+    } else if (order.status === "Siap") {
+      order.status = "Selesai";
+      showToast(`Pesanan ${order.id} telah SELESAI.`);
+    }
+    renderKdsOrders();
+    renderOrdersTable();
+  }
+}
 
 function renderOrdersTable() {
   const container = document.getElementById("ordersListTableContainer");
   if (!container) return;
-
-  const sampleOrders = [
-    { id: "SN-892101", customer: "Ahmad Miftah", items: "2x Es Jeruk Ori, 1x Gourmet Salad", total: 65000, method: "QRIS", status: "Selesai" },
-    { id: "SN-892102", customer: "Siti Rahma", items: "1x Mango Juice, 1x Fruit Bowl", total: 66000, method: "Cash", status: "Diproses" },
-    { id: "SN-892103", customer: "Budi Santoso", items: "1x Green Detox Combo", total: 55000, method: "Bank Transfer", status: "Siap" }
-  ];
 
   container.innerHTML = `
     <div class="table-responsive">
@@ -298,23 +429,132 @@ function renderOrdersTable() {
             <th>Total Pembayaran</th>
             <th>Metode</th>
             <th>Status</th>
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
-          ${sampleOrders.map(o => `
+          ${activeOrders.map(o => `
             <tr>
-              <td><strong>${o.id}</strong></td>
+              <td><strong style="color: #782E00; cursor: pointer;" onclick="openOrderDetailModal('${o.id}')">${o.id}</strong></td>
               <td>${o.customer}</td>
-              <td>${o.items}</td>
+              <td>${o.items.map(i => i.name).join(", ")}</td>
               <td><strong>Rp ${o.total.toLocaleString('id-ID')}</strong></td>
-              <td>${o.method}</td>
-              <td><span class="badge-fin-type type-pemasukan">${o.status}</span></td>
+              <td><span class="badge-fin-type" style="background: #FFF7ED; color: #FF7000;">${o.method}</span></td>
+              <td><span class="badge-fin-type ${o.status === 'Selesai' ? 'type-pemasukan' : 'type-pengeluaran'}">${o.status}</span></td>
+              <td>
+                <button class="btn-solid-brown-sm" style="padding: 0.3rem 0.65rem; font-size: 0.72rem;" onclick="openOrderDetailModal('${o.id}')">Struk</button>
+              </td>
             </tr>
           `).join("")}
         </tbody>
       </table>
     </div>
   `;
+}
+
+function openOrderDetailModal(orderId) {
+  const order = activeOrders.find(o => o.id === orderId);
+  if (!order) return;
+
+  const content = document.getElementById("receiptBodyContent");
+  if (content) {
+    content.innerHTML = `
+      <div style="text-align: center; border-bottom: 1px stroke #E2E8F0; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+        <h2 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.3rem; color: #782E00;">SRUPUT & NYAM</h2>
+        <p style="font-size: 0.75rem; color: #64748B;">F&B HQ - Outlet Utama</p>
+        <p style="font-size: 0.72rem; color: #94A3B8;">Order ID: <strong>${order.id}</strong> • ${order.time}</p>
+      </div>
+
+      <div style="font-size: 0.82rem; margin-bottom: 1rem;">
+        <p>Pelanggan: <strong>${order.customer}</strong></p>
+        <p>Metode Pembayaran: <strong>${order.method} (LUNAS)</strong></p>
+      </div>
+
+      <div style="border-top: 1px dashed #CBD5E1; border-bottom: 1px dashed #CBD5E1; padding: 0.75rem 0; margin-bottom: 1rem;">
+        ${order.items.map(item => `
+          <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.35rem;">
+            <span>${item.name}</span>
+            <strong>Rp ${item.price.toLocaleString('id-ID')}</strong>
+          </div>
+        `).join("")}
+      </div>
+
+      <div style="display: flex; justify-content: space-between; font-size: 1rem; font-weight: 800; color: #0F172A; margin-bottom: 1.25rem;">
+        <span>TOTAL:</span>
+        <span style="color: #782E00;">Rp ${order.total.toLocaleString('id-ID')}</span>
+      </div>
+
+      <button class="btn-hq-new-report" style="width: 100%; margin-bottom: 0.5rem;" onclick="simulatePrintReceipt('${order.id}')">
+        <i class="fa-solid fa-print"></i> Cetak Struk (Thermal Printer)
+      </button>
+    `;
+  }
+
+  const modal = document.getElementById("orderDetailModal");
+  if (modal) modal.classList.add("active");
+}
+
+function closeOrderDetailModal() {
+  const modal = document.getElementById("orderDetailModal");
+  if (modal) modal.classList.remove("active");
+}
+
+function simulatePrintReceipt(orderId) {
+  showToast(`Mencetak Struk Thermal untuk Pesanan ${orderId}...`);
+}
+
+/* ==========================================
+   6. STAFF MANAGEMENT ENGINE
+   ========================================== */
+
+function renderStaffTable() {
+  const tbody = document.getElementById("staffTableBody");
+  if (!tbody) return;
+
+  tbody.innerHTML = staffList.map(stf => `
+    <tr>
+      <td><strong>${stf.name}</strong></td>
+      <td>${stf.role}</td>
+      <td>${stf.shift}</td>
+      <td><span class="badge-fin-type type-pemasukan">${stf.status}</span></td>
+      <td>
+        <button class="btn-solid-brown-sm" style="padding: 0.3rem 0.65rem; font-size: 0.72rem; background: #DC2626;" onclick="deleteStaff('${stf.id}')">Hapus</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function openAddStaffModal() {
+  const modal = document.getElementById("addStaffModal");
+  if (modal) modal.classList.add("active");
+}
+
+function closeAddStaffModal() {
+  const modal = document.getElementById("addStaffModal");
+  if (modal) modal.classList.remove("active");
+}
+
+function handleSaveStaffForm(e) {
+  e.preventDefault();
+  const name = document.getElementById("staffFormName").value;
+  const role = document.getElementById("staffFormRole").value;
+  const shift = document.getElementById("staffFormShift").value;
+
+  const newId = `stf-${Date.now()}`;
+  staffList.push({ id: newId, name, role, shift, status: "Aktif" });
+  
+  closeAddStaffModal();
+  renderStaffTable();
+  showToast(`Anggota staf baru "${name}" berhasil ditambahkan!`);
+}
+
+function deleteStaff(id) {
+  const stf = staffList.find(s => s.id === id);
+  if (stf && confirm(`Hapus staf ${stf.name}?`)) {
+    staffList = staffList.filter(s => s.id !== id);
+    renderStaffTable();
+    showToast(`Staf ${stf.name} berhasil dihapus.`);
+  }
 }
 
 /* ==========================================

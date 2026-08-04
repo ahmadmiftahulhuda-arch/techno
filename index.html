@@ -436,8 +436,9 @@
           <div class="hq-page-header">
             <div>
               <h1 class="hq-page-title">Ringkasan Operational Dashboard</h1>
-              <p class="hq-page-subtitle">Status real-time outlet F&B HQ Sruput & Nyam</p>
+              <p class="hq-page-subtitle">Status real-time kitchen display system (KDS) & omzet hari ini</p>
             </div>
+            <button class="btn-solid-brown-sm" onclick="showToast('Memperbarui data antrean dapur...')"><i class="fa-solid fa-rotate"></i> Refresh KDS</button>
           </div>
 
           <div class="hq-kpi-grid">
@@ -461,6 +462,17 @@
               <div class="hq-kpi-value">6 <span class="hq-kpi-unit">Personil</span></div>
             </div>
           </div>
+
+          <!-- Real-time Kitchen Orders Grid -->
+          <div class="hq-top-products-card" style="margin-top: 1.5rem;">
+            <div class="hq-card-header">
+              <h3 class="hq-card-title">ANTREAN DAPUR REAL-TIME (KDS)</h3>
+              <span class="hq-kpi-badge badge-green"><i class="fa-solid fa-circle"></i> Live Sync</span>
+            </div>
+            <div class="kds-grid" id="kdsOrdersContainer">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
         </div>
 
         <!-- VIEW 3: MENU MANAGEMENT TAB -->
@@ -468,9 +480,17 @@
           <div class="hq-page-header">
             <div>
               <h1 class="hq-page-title">Manajemen Menu & Stok</h1>
-              <p class="hq-page-subtitle">Kelola harga, status ketersediaan, dan varian hidangan</p>
+              <p class="hq-page-subtitle">Kelola harga, status ketersediaan, dan varian hidangan Sruput & Nyam</p>
             </div>
             <button class="btn-solid-brown-sm" onclick="openAddMenuModal()"><i class="fa-solid fa-plus"></i> Tambah Menu Baru</button>
+          </div>
+
+          <!-- Category Filter Pills -->
+          <div class="hq-filter-pills-row" style="margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="pill-filter-item active" onclick="filterMenuCategory('all', this)">Semua Menu</button>
+            <button class="pill-filter-item" onclick="filterMenuCategory('Sruput Juice', this)">Sruput Juice</button>
+            <button class="pill-filter-item" onclick="filterMenuCategory('Nyam Salad', this)">Nyam Salad</button>
+            <button class="pill-filter-item" onclick="filterMenuCategory('Paket Combo', this)">Paket Combo</button>
           </div>
 
           <div class="hq-top-products-card">
@@ -499,7 +519,7 @@
           <div class="hq-page-header">
             <div>
               <h1 class="hq-page-title">Manajemen Pesanan (Orders)</h1>
-              <p class="hq-page-subtitle">Daftar transaksi masuk dan status pemrosesan dapur</p>
+              <p class="hq-page-subtitle">Daftar transaksi masuk, struk digital, dan status pemrosesan</p>
             </div>
           </div>
 
@@ -515,6 +535,7 @@
               <h1 class="hq-page-title">Tim & Staf Restoran</h1>
               <p class="hq-page-subtitle">Daftar karyawan shift aktif dan peran pengguna</p>
             </div>
+            <button class="btn-solid-brown-sm" onclick="openAddStaffModal()"><i class="fa-solid fa-user-plus"></i> Tambah Staf Baru</button>
           </div>
 
           <div class="hq-top-products-card">
@@ -524,29 +545,13 @@
                   <tr>
                     <th>Nama</th>
                     <th>Peran</th>
-                    <th>Shift</th>
+                    <th>Shift Kerja</th>
                     <th>Status</th>
+                    <th>Aksi</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td><strong>Ahmad Miftahul Huda</strong></td>
-                    <td>Store Manager</td>
-                    <td>Pagi (08.00 - 16.00)</td>
-                    <td><span class="badge-fin-type type-pemasukan">Aktif</span></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Riska Ika Maulida</strong></td>
-                    <td>Head Barista & Kitchen Lead</td>
-                    <td>Pagi (08.00 - 16.00)</td>
-                    <td><span class="badge-fin-type type-pemasukan">Aktif</span></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Budi Setiawan</strong></td>
-                    <td>Kasir / Frontend POS</td>
-                    <td>Siang (12.00 - 20.00)</td>
-                    <td><span class="badge-fin-type type-pemasukan">Aktif</span></td>
-                  </tr>
+                <tbody id="staffTableBody">
+                  <!-- Rendered via JS -->
                 </tbody>
               </table>
             </div>
@@ -558,22 +563,55 @@
           <div class="hq-page-header">
             <div>
               <h1 class="hq-page-title">Pengaturan Outlet</h1>
-              <p class="hq-page-subtitle">Konfigurasi alamat store, QRIS merchant ID, dan jam operasional</p>
+              <p class="hq-page-subtitle">Konfigurasi alamat store, QRIS merchant ID, pajak PPN, dan printer thermal</p>
             </div>
           </div>
 
-          <div class="hq-top-products-card" style="max-width: 600px;">
-            <form onsubmit="saveStoreSettings(event)">
-              <div style="margin-bottom: 1rem;">
-                <label style="font-size: 0.82rem; font-weight: 700; color: #475569; display: block; margin-bottom: 0.3rem;">Nama Restoran</label>
-                <input type="text" class="input-select-sm" style="width: 100%; padding: 0.6rem;" value="Sruput & Nyam (F&B HQ)">
-              </div>
-              <div style="margin-bottom: 1rem;">
-                <label style="font-size: 0.82rem; font-weight: 700; color: #475569; display: block; margin-bottom: 0.3rem;">DANA Merchant ID</label>
-                <input type="text" class="input-select-sm" style="width: 100%; padding: 0.6rem;" value="DANA-MERCHANT-SN89210">
-              </div>
-              <button type="submit" class="btn-solid-brown-sm">Simpan Perubahan</button>
-            </form>
+          <div class="hq-settings-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+            
+            <!-- Store Profile Settings -->
+            <div class="hq-top-products-card">
+              <h3 class="hq-card-title" style="margin-bottom: 1rem;"><i class="fa-solid fa-store"></i> Profil Restoran</h3>
+              <form onsubmit="saveStoreSettings(event)">
+                <div style="margin-bottom: 1rem;">
+                  <label style="font-size: 0.82rem; font-weight: 700; color: #475569; display: block; margin-bottom: 0.3rem;">Nama Restoran</label>
+                  <input type="text" class="input-select-sm" style="width: 100%; padding: 0.6rem;" value="Sruput & Nyam (F&B HQ)">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                  <label style="font-size: 0.82rem; font-weight: 700; color: #475569; display: block; margin-bottom: 0.3rem;">Alamat Outlet</label>
+                  <input type="text" class="input-select-sm" style="width: 100%; padding: 0.6rem;" value="Jl. Boulevard Kuliner No. 88, Jakarta Selatan">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                  <label style="font-size: 0.82rem; font-weight: 700; color: #475569; display: block; margin-bottom: 0.3rem;">Nomor Telepon / WhatsApp</label>
+                  <input type="text" class="input-select-sm" style="width: 100%; padding: 0.6rem;" value="0812-9876-543">
+                </div>
+                <button type="submit" class="btn-solid-brown-sm">Simpan Profil Outlet</button>
+              </form>
+            </div>
+
+            <!-- Payment & Printer Settings -->
+            <div class="hq-top-products-card">
+              <h3 class="hq-card-title" style="margin-bottom: 1rem;"><i class="fa-solid fa-credit-card"></i> Payment & Struk Settings</h3>
+              <form onsubmit="saveStoreSettings(event)">
+                <div style="margin-bottom: 1rem;">
+                  <label style="font-size: 0.82rem; font-weight: 700; color: #475569; display: block; margin-bottom: 0.3rem;">DANA / QRIS Merchant ID</label>
+                  <input type="text" class="input-select-sm" style="width: 100%; padding: 0.6rem;" value="DANA-MERCHANT-SN89210">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                  <label style="font-size: 0.82rem; font-weight: 700; color: #475569; display: block; margin-bottom: 0.3rem;">Pajak PPN & Service Charge (%)</label>
+                  <input type="text" class="input-select-sm" style="width: 100%; padding: 0.6rem;" value="10% PPN + 5% Service Charge">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                  <label style="font-size: 0.82rem; font-weight: 700; color: #475569; display: block; margin-bottom: 0.3rem;">Printer Thermal Struk</label>
+                  <select class="input-select-sm" style="width: 100%; padding: 0.6rem;">
+                    <option value="epson">Epson TM-T82 (Bluetooth / USB)</option>
+                    <option value="star">Star Micronics TSP100</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn-solid-brown-sm">Simpan Konfigurasi</button>
+              </form>
+            </div>
+
           </div>
         </div>
 
@@ -584,7 +622,7 @@
   </div>
 
 
-  <!-- MODAL: NEW REPORT GENERATOR -->
+  <!-- MODAL 1: NEW REPORT GENERATOR -->
   <div class="modal-overlay" id="newReportModal">
     <div class="modal-card" style="max-width: 480px;">
       <div class="modal-header-sticky">
@@ -619,6 +657,102 @@
         <button class="btn-hq-new-report" style="width: 100%;" onclick="generateReportDownload()">
           <i class="fa-solid fa-download"></i> Unduh Laporan LENGKAP
         </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL 2: ADD / EDIT MENU MODAL -->
+  <div class="modal-overlay" id="addMenuModal">
+    <div class="modal-card" style="max-width: 500px;">
+      <div class="modal-header-sticky">
+        <h3 class="modal-title" id="addMenuModalTitle"><i class="fa-solid fa-utensils"></i> Tambah Menu Baru</h3>
+        <button class="btn-close-modal" onclick="closeAddMenuModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body-wrapper" style="padding: 1.25rem;">
+        <form onsubmit="handleSaveMenuForm(event)">
+          <input type="hidden" id="menuFormId" value="">
+          <div style="margin-bottom: 0.85rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">Nama Menu / Hidangan</label>
+            <input type="text" class="input-select-sm" id="menuFormTitle" required style="width: 100%; padding: 0.6rem;" placeholder="mis. Es Jeruk Peras Original">
+          </div>
+          <div style="margin-bottom: 0.85rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">Kategori</label>
+            <select class="input-select-sm" id="menuFormCategory" style="width: 100%; padding: 0.6rem;">
+              <option value="Sruput Juice">Sruput Juice</option>
+              <option value="Nyam Salad">Nyam Salad</option>
+              <option value="Paket Combo">Paket Combo</option>
+              <option value="Sruput Beverage">Sruput Beverage</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0.85rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">Harga (Rp)</label>
+            <input type="number" class="input-select-sm" id="menuFormPrice" required style="width: 100%; padding: 0.6rem;" placeholder="15000">
+          </div>
+          <div style="margin-bottom: 0.85rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">Status Ketersediaan</label>
+            <select class="input-select-sm" id="menuFormStock" style="width: 100%; padding: 0.6rem;">
+              <option value="Tersedia">Tersedia</option>
+              <option value="Habis">Habis (Out of Stock)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 1.25rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">URL Gambar Hidangan</label>
+            <input type="text" class="input-select-sm" id="menuFormImage" style="width: 100%; padding: 0.6rem;" value="images/es_jeruk.png">
+          </div>
+          <button type="submit" class="btn-solid-brown-sm" style="width: 100%; padding: 0.75rem;"><i class="fa-solid fa-floppy-disk"></i> Simpan Menu</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL 3: DIGITAL RECEIPT / ORDER DETAIL MODAL -->
+  <div class="modal-overlay" id="orderDetailModal">
+    <div class="modal-card" style="max-width: 420px; background: #FFF;">
+      <div class="modal-header-sticky">
+        <h3 class="modal-title"><i class="fa-solid fa-receipt"></i> Struk Transaksi Digital</h3>
+        <button class="btn-close-modal" onclick="closeOrderDetailModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body-wrapper" style="padding: 1.25rem;" id="receiptBodyContent">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL 4: ADD STAFF MODAL -->
+  <div class="modal-overlay" id="addStaffModal">
+    <div class="modal-card" style="max-width: 450px;">
+      <div class="modal-header-sticky">
+        <h3 class="modal-title"><i class="fa-solid fa-user-plus"></i> Tambah Anggota Staf</h3>
+        <button class="btn-close-modal" onclick="closeAddStaffModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body-wrapper" style="padding: 1.25rem;">
+        <form onsubmit="handleSaveStaffForm(event)">
+          <div style="margin-bottom: 0.85rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">Nama Lengkap Staf</label>
+            <input type="text" class="input-select-sm" id="staffFormName" required style="width: 100%; padding: 0.6rem;" placeholder="mis. Rizky Pratama">
+          </div>
+          <div style="margin-bottom: 0.85rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">Peran / Posisi</label>
+            <select class="input-select-sm" id="staffFormRole" style="width: 100%; padding: 0.6rem;">
+              <option value="Store Manager">Store Manager</option>
+              <option value="Head Barista & Kitchen Lead">Head Barista & Kitchen Lead</option>
+              <option value="Kasir / Frontend POS">Kasir / Frontend POS</option>
+              <option value="Kitchen Helper">Kitchen Helper</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 1.25rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A; display: block; margin-bottom: 0.3rem;">Shift Kerja</label>
+            <select class="input-select-sm" id="staffFormShift" style="width: 100%; padding: 0.6rem;">
+              <option value="Pagi (08.00 - 16.00)">Pagi (08.00 - 16.00)</option>
+              <option value="Siang (12.00 - 20.00)">Siang (12.00 - 20.00)</option>
+              <option value="Malam (16.00 - 23.00)">Malam (16.00 - 23.00)</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-solid-brown-sm" style="width: 100%; padding: 0.75rem;"><i class="fa-solid fa-user-check"></i> Tambah Staf</button>
+        </form>
       </div>
     </div>
   </div>
