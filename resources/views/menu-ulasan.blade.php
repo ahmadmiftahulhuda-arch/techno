@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Sruput & Nyam - Es Jeruk Peras & Gourmet Salad Organik</title>
+  <title>Sruput & Nyam - Katalog Menu, Harga & Ulasan Pelanggan</title>
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +15,268 @@
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    /* Dedicated Page Layout for Combined Menu + Reviews + Prices */
+    .menu-ulasan-page {
+      padding-top: 5rem;
+      padding-bottom: 3rem;
+      background: #F8FAFC;
+      min-height: 100vh;
+    }
+    
+    .menu-ulasan-header {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .mu-title-box h1 {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--primary-brown);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.15;
+    }
+
+    .mu-title-box p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .menu-ulasan-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .catalog-section-box {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+    }
+
+    .filter-bar-compact {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .catalog-grid-2col {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .compact-menu-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-fast);
+      position: relative;
+    }
+
+    .compact-menu-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      border-color: #CBD5E1;
+    }
+
+    .compact-card-img {
+      position: relative;
+      width: 100%;
+      height: 130px;
+      overflow: hidden;
+    }
+
+    .compact-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .compact-card-body {
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .compact-card-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 0.25rem;
+    }
+
+    .compact-card-desc {
+      font-size: 0.78rem;
+      color: #64748B;
+      line-height: 1.35;
+      margin-bottom: 0.75rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .price-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 0.5rem;
+      border-top: 1px solid #F1F5F9;
+    }
+
+    .price-tag-val {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--primary-brown);
+    }
+
+    .strike-price-sm {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      text-decoration: line-through;
+      margin-right: 0.3rem;
+    }
+
+    .btn-add-mini {
+      padding: 0.4rem 0.85rem;
+      background: #FDF4EB;
+      color: var(--primary-brown);
+      font-weight: 700;
+      font-size: 0.78rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(140, 59, 0, 0.2);
+      cursor: pointer;
+      transition: var(--transition-fast);
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .btn-add-mini:hover {
+      background: var(--primary-brown);
+      color: #FFFFFF;
+    }
+
+    /* Right Column Review Side Panel */
+    .reviews-section-box {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+      position: sticky;
+      top: 5rem;
+    }
+
+    .rating-header-compact {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #F1F5F9;
+    }
+
+    .big-score-num {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--primary-brown);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1;
+    }
+
+    .score-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .gold-stars {
+      color: #F59E0B;
+      font-size: 1rem;
+      display: flex;
+      gap: 0.15rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .rating-total-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .reviews-scroll-feed {
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 0.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .compact-review-card {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 0.85rem;
+    }
+
+    .rev-user-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.35rem;
+    }
+
+    .rev-user-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #0F172A;
+    }
+
+    .rev-stars {
+      color: #F59E0B;
+      font-size: 0.75rem;
+    }
+
+    .rev-text-sm {
+      font-size: 0.8rem;
+      color: #475569;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 900px) {
+      .menu-ulasan-grid {
+        grid-template-columns: 1fr;
+      }
+      .reviews-section-box {
+        position: relative;
+        top: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .catalog-grid-2col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -28,7 +290,7 @@
       </button>
 
       <!-- Brand Logo -->
-      <div class="brand-logo" onclick="scrollToSection('hero')" style="cursor: pointer;">
+      <div class="brand-logo" onclick="window.location.href='/'" style="cursor: pointer;">
         <div class="brand-text">
           <span class="text-sruput">Sruput</span>
           <span class="text-amp">&</span>
@@ -37,22 +299,20 @@
       </div>
 
       <!-- Desktop Nav Links -->
-      <ul class="nav-links" id="desktopNavLinks">
-        <li><a href="#hero" class="nav-link active" onclick="setActiveNav(this)">Beranda</a></li>
-        <li><a href="#menu" class="nav-link" onclick="setActiveNav(this)">Menu Utama</a></li>
-        <li><a href="#combo" class="nav-link" onclick="setActiveNav(this)">Paket Combo</a></li>
-        <li><a href="#reviews" class="nav-link" onclick="setActiveNav(this)">Ulasan</a></li>
-        <li><a href="#faq" class="nav-link" onclick="setActiveNav(this)">FAQ</a></li>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">Beranda</a></li>
+        <li><a href="/menu-ulasan" class="nav-link active">Katalog & Ulasan</a></li>
+        <li><a href="/admin" class="nav-link">Mode Admin</a></li>
       </ul>
 
       <!-- Action Buttons -->
       <div class="nav-actions">
-        <button class="btn-dapur-orange" id="adminBtn" title="Buka Mode Dapur">
-          <i class="fa-solid fa-fire-burner"></i> <span class="dapur-btn-text">Mode Dapur</span>
+        <button class="btn-dapur-orange" onclick="window.location.href='/admin'" title="Buka Dashboard Admin">
+          <i class="fa-solid fa-fire-burner"></i> <span class="dapur-btn-text">Admin Panel</span>
         </button>
         <button class="btn-icon-cart" id="cartBtn" title="Buka Keranjang Belanja">
           <i class="fa-solid fa-cart-shopping"></i>
-          <span class="cart-badge" id="cartBadgeCount">0</span>
+          <span class="cart-badge" id="cartBadgeCount">2</span>
         </button>
       </div>
 
@@ -61,307 +321,128 @@
     <!-- Mobile Slide-Down Menu Overlay -->
     <div class="mobile-menu-overlay" id="mobileMenuOverlay">
       <ul class="mobile-nav-list">
-        <li><a href="#hero" onclick="mobileNavClick('hero')"><i class="fa-solid fa-house"></i> Beranda</a></li>
-        <li><a href="#menu" onclick="mobileNavClick('menu')"><i class="fa-solid fa-utensils"></i> Menu Utama</a></li>
-        <li><a href="#combo" onclick="mobileNavClick('combo')"><i class="fa-solid fa-box-open"></i> Paket Combo</a></li>
-        <li><a href="#reviews" onclick="mobileNavClick('reviews')"><i class="fa-solid fa-star"></i> Ulasan Pelanggan</a></li>
-        <li><a href="#faq" onclick="mobileNavClick('faq')"><i class="fa-solid fa-circle-question"></i> Pertanyaan Umum (FAQ)</a></li>
+        <li><a href="/"><i class="fa-solid fa-house"></i> Beranda Utama</a></li>
+        <li><a href="/menu-ulasan"><i class="fa-solid fa-utensils"></i> Katalog & Ulasan</a></li>
+        <li><a href="/admin"><i class="fa-solid fa-shapes"></i> Admin Panel</a></li>
       </ul>
     </div>
   </header>
 
   <!-- Main Content Container -->
-  <main>
-    
-    <!-- 1. Hero Section -->
-    <section class="hero reveal-on-scroll" id="hero">
-      <div class="container hero-grid">
-        <div class="hero-content">
-          <div class="badge-tag-drop">
-            <i class="fa-solid fa-droplet icon-citrus-drop"></i> 100% Jeruk Peras Asli
-          </div>
-
-          <h1 class="hero-title-clean">
-            Segarnya Sruput Jeruk,<br>
-            Lezatnya Nyam Salad<br>
-            dalam Satu Tempat
-          </h1>
-
-          <p class="hero-description-clean">
-            Nikmati kesegaran jus jeruk murni tanpa tambahan gula dan kelezatan salad organik segar yang disiapkan khusus untuk Anda setiap hari. Pilihan tepat untuk gaya hidup sehat yang praktis.
-          </p>
-
-          <div class="hero-buttons-stacked">
-            <button class="btn-solid-brown" onclick="scrollToSection('menu')">
-              Pesan Sruput & Nyam <i class="fa-solid fa-arrow-right"></i>
-            </button>
-            <button class="btn-outline-pill" onclick="openDemoModal()">
-              Lihat Varian Menu
-            </button>
-          </div>
+  <main class="menu-ulasan-page">
+    <div class="container">
+      
+      <!-- Header Banner -->
+      <div class="menu-ulasan-header">
+        <div class="mu-title-box">
+          <h1>Menu Utama, Harga & Ulasan</h1>
+          <p>Transparansi harga murni, bahan segar 100%, dan ulasan terpercaya pembeli.</p>
         </div>
 
-        <!-- Hero Visual Showcase -->
-        <div class="hero-visual-stage">
-          <div class="hero-image-card-bg">
-            <img src="images/combo.png" alt="Es Jeruk dan Salad Sruput & Nyam" class="hero-img-showcase">
+        <div class="search-box-container" style="width: 280px;">
+          <i class="fa-solid fa-magnifying-glass search-icon-input"></i>
+          <input type="text" class="input-search-menu" id="menuSearchInput" placeholder="Cari menu favorit..." oninput="filterFullMenuCatalog()">
+        </div>
+      </div>
+
+      <!-- 2-Column Split Dashboard (Menu + Reviews) -->
+      <div class="menu-ulasan-grid">
+        
+        <!-- Left Column: Menu Catalog & Pricing -->
+        <div class="catalog-section-box">
+          
+          <div class="filter-bar-compact">
+            <h3 style="font-size: 1.1rem; color: #0F172A;"><i class="fa-solid fa-utensils" style="color: var(--primary-brown);"></i> Pilih Menu Favorit</h3>
             
-            <div class="float-badge-topleft">
-              <div class="badge-star-icon"><i class="fa-solid fa-star"></i></div>
-              <div class="badge-text-box">
-                <span class="badge-title-val">4.9/5 Rating</span>
-                <span class="badge-sub-text">Dari 2k+ Ulasan</span>
+            <div class="category-pills-row" style="margin-bottom: 0;">
+              <button class="pill-filter-item active" data-cat="all" onclick="filterCategoryPill('all', this)">Semua</button>
+              <button class="pill-filter-item" data-cat="sruput" onclick="filterCategoryPill('sruput', this)">Sruput</button>
+              <button class="pill-filter-item" data-cat="nyam" onclick="filterCategoryPill('nyam', this)">Nyam</button>
+              <button class="pill-filter-item" data-cat="combo" onclick="filterCategoryPill('combo', this)">Combo</button>
+            </div>
+          </div>
+
+          <!-- 2-Column Responsive Product Catalog Grid -->
+          <div class="catalog-grid-2col" id="fullCatalogGrid">
+            <!-- Dynamic Cards Injected via app.js -->
+          </div>
+
+        </div>
+
+        <!-- Right Column: Rating Summary & User Reviews -->
+        <div class="reviews-section-box">
+          
+          <h3 style="font-size: 1.1rem; color: #0F172A; margin-bottom: 1rem;"><i class="fa-solid fa-star" style="color: #F59E0B;"></i> Ulasan & Rating</h3>
+
+          <!-- Rating Header -->
+          <div class="rating-header-compact">
+            <div class="big-score-num">4.9</div>
+            <div class="score-meta">
+              <div class="gold-stars">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
               </div>
+              <span class="rating-total-text">Berdasarkan 1,284 Ulasan Pembeli</span>
             </div>
+          </div>
 
-            <div class="float-badge-bottomright">
-              <div class="badge-leaf-icon"><i class="fa-solid fa-leaf"></i></div>
-              <div class="badge-text-box">
-                <span class="badge-title-val">100% Organik</span>
-                <span class="badge-sub-text">Dipanen Pagi Ini</span>
+          <!-- Scrollable Customer Reviews Feed -->
+          <div class="reviews-scroll-feed" id="userReviewsContainer">
+            
+            <div class="compact-review-card">
+              <div class="rev-user-row">
+                <span class="rev-user-name">Budi Santoso</span>
+                <div class="rev-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
               </div>
+              <p class="rev-text-sm">Paket combo sangat memuaskan, porsi pas dan bumbu meresap sempurna. Pengiriman cepat!</p>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- 2. Menu Utama Section -->
-    <section class="section-full-menu reveal-on-scroll" id="menu">
-      <div class="container">
-        
-        <div class="menu-page-header-row">
-          <div class="menu-page-title-box">
-            <h2 class="menu-page-title">Menu Utama</h2>
-            <p class="menu-page-subtitle">Jelajahi kesegaran alami dalam setiap tegukan dan gigitan.</p>
-          </div>
-
-          <div class="search-box-container">
-            <i class="fa-solid fa-magnifying-glass search-icon-input"></i>
-            <input type="text" class="input-search-menu" id="menuSearchInput" placeholder="Cari menu favoritmu..." oninput="filterFullMenuCatalog()">
-          </div>
-        </div>
-
-        <!-- Filter Category Pills -->
-        <div class="category-pills-row">
-          <button class="pill-filter-item active" data-cat="all" onclick="filterCategoryPill('all', this)">Semua</button>
-          <button class="pill-filter-item" data-cat="sruput" onclick="filterCategoryPill('sruput', this)">Sruput Juice</button>
-          <button class="pill-filter-item" data-cat="nyam" onclick="filterCategoryPill('nyam', this)">Nyam Salad</button>
-          <button class="pill-filter-item" data-cat="combo" onclick="filterCategoryPill('combo', this)">Paket Combo</button>
-          <button class="pill-filter-item" data-cat="topping" onclick="filterCategoryPill('topping', this)">Extra Topping</button>
-        </div>
-
-        <div class="full-catalog-grid" id="fullCatalogGrid"></div>
-
-      </div>
-    </section>
-
-    <!-- 3. Paket Combo Section -->
-    <section class="section-combo-highlight reveal-on-scroll" id="combo">
-      <div class="container">
-        <div class="combo-banner-card">
-          <div class="combo-banner-text">
-            <span class="tag-badge-pill tag-combo-save"><i class="fa-solid fa-tag"></i> Promo Spesial Combo</span>
-            <h2 class="combo-title">Paket Combo Sruput & Nyam</h2>
-            <p class="combo-desc">Perpaduan sempurna 1x Es Jeruk Peras Original dingin segar + 1x Gourmet Salad Bowl sehat. Solusi lengkap makan siang bergizi!</p>
-            <div class="combo-price-row">
-              <span class="price-strike-lg">Rp 50.000</span>
-              <span class="price-main-lg">Rp 45.000</span>
+            <div class="compact-review-card">
+              <div class="rev-user-row">
+                <span class="rev-user-name">Siti Aminah</span>
+                <div class="rev-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+              </div>
+              <p class="rev-text-sm">Penyajian bersih dan rapi. Minuman segar jeruk peras murni tanpa pemanis buatan.</p>
             </div>
-            <button class="btn-solid-brown" onclick="openCustomModal('combo-ayam')">
-              Pesan Paket Combo Ini
-            </button>
-          </div>
-          <div class="combo-banner-img">
-            <img src="images/combo.png" alt="Paket Combo Highlight">
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- 4. Ulasan Section -->
-    <section class="section-reviews-page reveal-on-scroll" id="reviews">
-      <div class="container">
-        
-        <div class="section-header-center">
-          <h2 class="section-title-bold">Ulasan Pelanggan</h2>
-          <p class="section-subtitle-muted">Apa kata mereka tentang kesegaran Sruput & Nyam</p>
-        </div>
-
-        <!-- Rating Summary Card -->
-        <div class="review-summary-card">
-          <div class="summary-left-box">
-            <h2 class="rating-big-score">4.9</h2>
-            <div class="rating-stars-gold">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            <div class="compact-review-card">
+              <div class="rev-user-row">
+                <span class="rev-user-name">Andi Pratama</span>
+                <div class="rev-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+              </div>
+              <p class="rev-text-sm">Menu andalan untuk makan siang kantor. Salad organik segar dan packaging aman banget.</p>
             </div>
-            <p class="rating-count-text">Dari 1,284 Ulasan</p>
+
+            <div class="compact-review-card">
+              <div class="rev-user-row">
+                <span class="rev-user-name">Rizky Firmansyah</span>
+                <div class="rev-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+              </div>
+              <p class="rev-text-sm">Suka banget sama kebersihan dan rasa makanannya. Recommended!</p>
+            </div>
+
           </div>
 
-          <div class="summary-right-bars">
-            <div class="star-bar-row">
-              <span class="bar-star-label">5 <i class="fa-solid fa-star"></i></span>
-              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 88%;"></div></div>
-            </div>
-            <div class="star-bar-row">
-              <span class="bar-star-label">4 <i class="fa-solid fa-star"></i></span>
-              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 10%;"></div></div>
-            </div>
-            <div class="star-bar-row">
-              <span class="bar-star-label">3 <i class="fa-solid fa-star"></i></span>
-              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 2%;"></div></div>
-            </div>
-            <div class="star-bar-row">
-              <span class="bar-star-label">2 <i class="fa-solid fa-star"></i></span>
-              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 0.5%;"></div></div>
-            </div>
-            <div class="star-bar-row">
-              <span class="bar-star-label">1 <i class="fa-solid fa-star"></i></span>
-              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 0.5%;"></div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="reviews-masonry-grid" id="userReviewsContainer">
-          <div class="user-review-card">
-            <div class="review-card-head">
-              <div><h4 class="user-name">Budi Santoso</h4><span class="review-time">2 Hari yang lalu</span></div>
-              <div class="review-stars-row"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-            </div>
-            <div class="badge-verified"><i class="fa-solid fa-circle-check"></i> Verified Purchase</div>
-            <p class="user-review-text">Rasanya luar biasa! Paket combo sangat memuaskan, porsi pas dan bumbu meresap sempurna. Pengiriman juga sangat cepat. Sangat direkomendasikan untuk makan siang kantor.</p>
-          </div>
-
-          <div class="user-review-card">
-            <div class="review-card-head">
-              <div><h4 class="user-name">Siti Aminah</h4><span class="review-time">1 Minggu yang lalu</span></div>
-              <div class="review-stars-row"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-            </div>
-            <div class="badge-verified"><i class="fa-solid fa-circle-check"></i> Verified Purchase</div>
-            <p class="user-review-text">Penyajikan sangat bersih dan rapi. Rasa minumannya segar, tidak terlalu manis. Makanan utamanya enak tapi mungkin porsinya bisa ditambah sedikit. Secara keseluruhan sangat memuaskan!</p>
-          </div>
-
-          <div class="user-review-card">
-            <div class="review-card-head">
-              <div><h4 class="user-name">Andi Pratama</h4><span class="review-time">2 Minggu yang lalu</span></div>
-              <div class="review-stars-row"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-            </div>
-            <div class="badge-verified"><i class="fa-solid fa-circle-check"></i> Verified Purchase</div>
-            <p class="user-review-text">Menu andalan saya untuk akhir pekan. Sruput & Nyam tidak pernah mengecewakan. Kualitas bahan selalu terasa segar dan packagingnya aman banget.</p>
-          </div>
-
-          <div class="user-review-card">
-            <div class="review-card-head">
-              <div><h4 class="user-name">Dewi Lestari</h4><span class="review-time">3 Minggu yang lalu</span></div>
-              <div class="review-stars-row"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i></div>
-            </div>
-            <p class="user-review-text">Pengalaman pertama pesen di sini. Makanannya enak dan suasananya pas, tapi sayang kurirnya nyasar jadi agak lama nunggunya. Tapi dari segi kualitas makanan, juara.</p>
-          </div>
-
-          <div class="user-review-card">
-            <div class="review-card-head">
-              <div><h4 class="user-name">Ulasan Pelanggan</h4><span class="review-time">Foto Hidangan</span></div>
-            </div>
-            <div class="review-photo-wrapper">
-              <img src="images/review_dish.png" alt="Foto Ulasan Pelanggan" class="review-photo-img">
-            </div>
-          </div>
-
-          <div class="user-review-card">
-            <div class="review-card-head">
-              <div><h4 class="user-name">Rizky Firmansyah</h4><span class="review-time">1 Bulan yang lalu</span></div>
-              <div class="review-stars-row"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-            </div>
-            <div class="badge-verified"><i class="fa-solid fa-circle-check"></i> Verified Purchase</div>
-            <p class="user-review-text">Suka banget sama konsep pure white dan kebersihan restorannya. Tercermin juga di kualitas makanannya yang rapi dan higienis. Recommended!</p>
-          </div>
-        </div>
-
-        <div class="write-review-banner-box">
-          <h3 class="write-banner-title">Punya Pengalaman Menarik?</h3>
-          <p class="write-banner-subtitle">Bagikan pengalaman bersantap Anda di Sruput & Nyam. Ulasan Anda membantu kami untuk terus menyajikan kualitas kuliner terbaik.</p>
-          <button class="btn-write-review-brown" onclick="openWriteReviewModal()">
-            <i class="fa-solid fa-pen"></i> Tulis Ulasan
+          <button class="btn-solid-brown-large" style="padding: 0.75rem; font-size: 0.9rem;" onclick="openWriteReviewModal()">
+            <i class="fa-solid fa-pen"></i> Tulis Ulasan Anda
           </button>
+
         </div>
 
       </div>
-    </section>
 
-    <!-- 5. FAQ Section -->
-    <section class="section-faq reveal-on-scroll" id="faq">
-      <div class="container">
-        <div class="section-header-center">
-          <h2 class="section-title-bold">Pertanyaan Umum (FAQ)</h2>
-          <p class="section-subtitle-muted">Informasi seputar pemesanan dan produk kami</p>
-        </div>
-
-        <div class="faq-accordion-box">
-          <div class="faq-item">
-            <h4 class="faq-question"><i class="fa-solid fa-circle-question"></i> Apakah Es Jeruk menggunakan gula buatan?</h4>
-            <p class="faq-answer">Tidak sama sekali! Es Jeruk kami 100% dibuat dari perasan buah jeruk asli murni. Anda juga dapat memilih tingkat kemanisan gula pasir asli sesuai selera.</p>
-          </div>
-          <div class="faq-item">
-            <h4 class="faq-question"><i class="fa-solid fa-circle-question"></i> Bagaimana kualitas sayuran salad yang digunakan?</h4>
-            <p class="faq-answer">Sayuran kami dipanen dari kebun hidroponik segar setiap pagi dan dicuci bersih dengan standar higienis tinggi sebelum disajikan.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Global Footer -->
-  <footer class="footer-menu-page">
-    <div class="container footer-4col-grid">
-      <div class="footer-col-brand">
-        <div class="brand-text-footer"><span class="text-sruput">Sruput</span> <span class="text-amp">&</span> <span class="text-nyam">Nyam</span></div>
-        <p class="footer-tagline-text">Crafted for Culinary Excellence.</p>
-        <p class="footer-hours-text">&copy; 2024 Sruput & Nyam. Buka 09:00 - 21:00 WIB.</p>
-      </div>
-
-      <div class="footer-col-nav">
-        <h4 class="footer-head-title">Navigasi</h4>
-        <ul class="footer-nav-list">
-          <li><a href="#hero" onclick="scrollToSection('hero')">Beranda</a></li>
-          <li><a href="#menu" onclick="scrollToSection('menu')">Menu Utama</a></li>
-          <li><a href="#combo" onclick="scrollToSection('combo')">Paket Combo</a></li>
-          <li><a href="#reviews" onclick="scrollToSection('reviews')">Ulasan</a></li>
-          <li><a href="#faq" onclick="scrollToSection('faq')">FAQ</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col-social">
-        <h4 class="footer-head-title">Sosial Media</h4>
-        <ul class="footer-nav-list">
-          <li><a href="#">Instagram</a></li>
-          <li><a href="#">Facebook</a></li>
-          <li><a href="#">Twitter</a></li>
-          <li><a href="#">WhatsApp</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col-payment">
-        <h4 class="footer-head-title">Pembayaran Direct</h4>
-        <ul class="footer-nav-list">
-          <li>DANA Business QRIS</li>
-          <li>DANA Merchant API</li>
-          <li>GoPay | OVO | ShopeePay</li>
-        </ul>
-      </div>
     </div>
-  </footer>
+  </main>
 
   <!-- Mobile Floating Sticky Cart Bar -->
   <div class="mobile-sticky-cart-bar" id="mobileStickyCartBar" onclick="openCartDrawer()">
     <div class="mobile-sticky-cart-info">
       <div class="mobile-cart-icon-wrapper">
         <i class="fa-solid fa-basket-shopping"></i>
-        <span class="mobile-cart-badge-count" id="mobileCartBadge">0</span>
+        <span class="mobile-cart-badge-count" id="mobileCartBadge">2</span>
       </div>
       <div class="mobile-cart-text">
         <span class="mobile-cart-label">Keranjang Belanja</span>
-        <span class="mobile-cart-total" id="mobileCartTotal">Rp 0</span>
+        <span class="mobile-cart-total" id="mobileCartTotal">Rp 70.000</span>
       </div>
     </div>
     <button class="btn-mobile-checkout">
@@ -470,11 +551,11 @@
               <h4 class="card-box-title mb-3">Ringkasan Pesanan</h4>
               <div id="checkoutSummaryItemsList"></div>
               <div class="summary-price-calc-box">
-                <div class="calc-row"><span>Subtotal</span><span id="checkoutSubtotal">Rp 0</span></div>
+                <div class="calc-row"><span>Subtotal</span><span id="checkoutSubtotal">Rp 60.000</span></div>
                 <div class="calc-row"><span>Ongkos Kirim</span><span id="checkoutShipping">Rp 10.000</span></div>
                 <div class="calc-row total-calc-row">
                   <span>Total</span>
-                  <span class="total-big-val" id="checkoutTotal">Rp 10.000</span>
+                  <span class="total-big-val" id="checkoutTotal">Rp 70.000</span>
                 </div>
               </div>
 
@@ -551,7 +632,7 @@
     </div>
   </div>
 
-  <!-- MODAL 4: DANA DIRECT QRIS MODAL (DANA BLUE BRANDING & MERCHANT ID) -->
+  <!-- MODAL 4: DANA DIRECT QRIS MODAL -->
   <div class="modal-overlay" id="paymentModal">
     <div class="modal-card" style="max-width: 450px; text-align: center;">
       
@@ -563,7 +644,6 @@
 
       <div class="modal-body-wrapper" style="padding: 1.25rem;">
         
-        <!-- Timer Box -->
         <div style="background: #F0F9FF; border: 1px solid #BAE6FD; padding: 0.75rem 1rem; border-radius: 14px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
           <div style="text-align: left;">
             <p style="font-size: 0.75rem; color: #0369A1; font-weight: 600;">Selesaikan Pembayaran DANA:</p>
@@ -575,9 +655,7 @@
         <p style="font-size: 0.85rem; color: var(--text-muted);">DANA Merchant Trans ID: <strong id="paymentOrderId" style="color: var(--text-main); font-family: monospace; font-size: 0.95rem;">DANA-SN-892103</strong></p>
         <h3 style="font-size: 1.85rem; color: #118EEA; margin: 0.25rem 0 1rem; font-family: 'Outfit', sans-serif;" id="paymentAmount">Rp 70.000</h3>
 
-        <!-- Interactive DANA Direct QRIS Display Box -->
         <div style="background: #FFFFFF; padding: 1.25rem; border-radius: 20px; display: inline-block; border: 2px solid #118EEA; margin-bottom: 1.25rem; position: relative; box-shadow: 0 8px 24px rgba(17, 142, 234, 0.15);">
-          
           <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: #118EEA; color: #FFF; padding: 0.3rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; margin-bottom: 0.85rem;">
             <span>DANA</span>
             <span style="opacity: 0.5;">|</span>
@@ -608,7 +686,7 @@
       <div class="cart-header-title">
         <i class="fa-solid fa-cart-shopping cart-icon-head"></i>
         <span>Keranjang</span>
-        <span class="cart-count-badge-head" id="cartDrawerBadge">0</span>
+        <span class="cart-count-badge-head" id="cartDrawerBadge">2</span>
       </div>
       <button class="btn-close-cart" id="closeCartBtn"><i class="fa-solid fa-xmark"></i></button>
     </div>
@@ -622,10 +700,10 @@
       </div>
 
       <div class="cart-summary-box">
-        <div class="summary-line"><span>Subtotal</span><span id="cartSubtotal">Rp 0</span></div>
+        <div class="summary-line"><span>Subtotal</span><span id="cartSubtotal">Rp 60.000</span></div>
         <div class="summary-line"><span>Ongkos Kirim</span><span id="cartShipping">Rp 10.000</span></div>
         <div class="summary-line discount-line"><span>Diskon</span><span id="cartDiscount">- Rp 0</span></div>
-        <div class="summary-line total-line"><span>Total</span><span id="cartTotal" class="total-price-text">Rp 10.000</span></div>
+        <div class="summary-line total-line"><span>Total</span><span id="cartTotal" class="total-price-text">Rp 70.000</span></div>
       </div>
 
       <button class="btn-checkout-primary" onclick="openCheckoutModal()">
