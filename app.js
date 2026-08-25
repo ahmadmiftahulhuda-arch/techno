@@ -473,7 +473,7 @@ function updateCartUI() {
 
       return `
         <div class="cart-item-card">
-          <img src="${item.image}" alt="${item.title}">
+          <img src="${item.image}" alt="${item.title}" loading="lazy">
           <div class="cart-item-info">
             <div class="cart-item-head-row">
               <h5 class="cart-item-name">${item.title}</h5>
@@ -557,7 +557,7 @@ function openCheckoutModal() {
 
       return `
         <div class="summary-item-row">
-          <img src="${item.image}" class="summary-item-thumb">
+          <img src="${item.image}" class="summary-item-thumb" loading="lazy">
           <div class="summary-item-meta">
             <h5 class="summary-item-name">${item.title}</h5>
             <span class="summary-item-opt">${optText}</span>

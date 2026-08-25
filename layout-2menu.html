@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -11,7 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/solid.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/regular.min.css">
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css">
@@ -566,7 +568,7 @@
     <div class="mh-hero-section">
       <div class="mh-hero-card">
         <div class="mh-hero-thumb">
-          <img src="images/fruit_salad.png" alt="Salad Buah Segar">
+          <img src="images/fruit_salad.png" alt="Salad Buah Segar" loading="lazy">
         </div>
         <div class="mh-hero-content">
           <div class="mh-rating-pill">
@@ -588,7 +590,7 @@
         <!-- Product 1: Es Jeruk Peras (7k) -->
         <div class="mh-product-card">
           <div class="mh-card-thumb">
-            <img src="images/es_jeruk.png" alt="Es Jeruk Peras Original">
+            <img src="images/es_jeruk.png" alt="Es Jeruk Peras Original" loading="lazy">
             <span class="mh-card-badge">Best Seller</span>
           </div>
           <div class="mh-card-body">
@@ -604,7 +606,7 @@
         <!-- Product 2: Gourmet Salad Buah (8k) -->
         <div class="mh-product-card">
           <div class="mh-card-thumb">
-            <img src="images/fruit_salad.png" alt="Gourmet Salad Buah Segar">
+            <img src="images/fruit_salad.png" alt="Gourmet Salad Buah Segar" loading="lazy">
             <span class="mh-card-badge" style="background: var(--emerald-green);">Segar</span>
           </div>
           <div class="mh-card-body">
@@ -781,7 +783,7 @@
   <div class="modal-overlay" id="customModal">
     <div class="modal-card">
       <div class="modal-hero-img-box">
-        <img src="images/es_jeruk.png" id="modalHeroImg" alt="Product Image">
+        <img src="images/es_jeruk.png" id="modalHeroImg" alt="Product Image" loading="lazy">
         <button class="btn-close-img-modal" onclick="closeCustomModal()"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body-wrapper">
@@ -869,6 +871,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Script Engine -->
-  <script src="app.js"></script>
+  <script src="app.js" defer></script>
 </body>
 </html>

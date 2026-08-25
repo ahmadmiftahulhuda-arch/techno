@@ -11,7 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/solid.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/regular.min.css">
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css">
@@ -598,7 +600,7 @@
   <div class="modal-overlay" id="customModal">
     <div class="modal-card">
       <div class="modal-hero-img-box">
-        <img src="images/es_jeruk.png" id="modalHeroImg" alt="Product Image">
+        <img src="images/es_jeruk.png" id="modalHeroImg" alt="Product Image" loading="lazy">
         <button class="btn-close-img-modal" onclick="closeCustomModal()"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body-wrapper">
@@ -732,6 +734,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Script Engine -->
-  <script src="app.js"></script>
+  <script src="app.js" defer></script>
 </body>
 </html>

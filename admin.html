@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -11,7 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/solid.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/regular.min.css">
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="admin.css">
@@ -187,7 +189,7 @@
 
           <!-- Profile User Avatar -->
           <div class="hq-user-profile" title="Klik untuk Edit Profil Manajer" onclick="openEditProfileModal()">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Avatar Pengguna" class="hq-avatar-img" id="topbarAvatarImg">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Avatar Pengguna" class="hq-avatar-img" id="topbarAvatarImg" loading="lazy">
           </div>
 
         </div>
@@ -1325,7 +1327,7 @@
           </div>
           <div class="hero-visual-stage">
             <div class="hero-image-card-bg">
-              <img src="images/combo.png" alt="Es Jeruk dan Salad Sruput & Nyam" class="hero-img-showcase">
+              <img src="images/combo.png" alt="Es Jeruk dan Salad Sruput & Nyam" class="hero-img-showcase" loading="lazy">
             </div>
           </div>
         </div>
@@ -1351,6 +1353,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Script Engine -->
-  <script src="admin.js"></script>
+  <script src="admin.js" defer></script>
 </body>
 </html>

@@ -11,7 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- FontAwesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/solid.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/regular.min.css">
 
   <style>
     /* ===== RESET & BASE ===== */
@@ -492,6 +494,7 @@
         <img
           src="images/es_jeruk.png"
           alt="Es Jeruk Peras Original"
+          loading="lazy"
           onerror="this.style.display='none'; document.getElementById('fb-jeruk').style.display='flex';"
         >
         <div class="p-img-fallback" id="fb-jeruk">&#127819;</div>
@@ -513,6 +516,7 @@
         <img
           src="images/fruit_salad.png"
           alt="Gourmet Salad Buah Segar"
+          loading="lazy"
           onerror="this.style.display='none'; document.getElementById('fb-salad').style.display='flex';"
         >
         <div class="p-img-fallback" id="fb-salad">&#127815;</div>
