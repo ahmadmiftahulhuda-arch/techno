@@ -1,19 +1,24 @@
-/* ==========================================================================
-   SRUPUT & NYAM - Mobile & Desktop Responsive Engine
-   Seamless SPA Scroll, Dynamic QRIS Payment & Real-time Webhook Simulation
-   Integrated with Admin LocalStorage Persistence
-   ========================================================================== */
+// Catalog Version - naikkan angka ini setiap kali data catalog diubah
+const CATALOG_VERSION = "v3.0-2026-08-23";
+
+// Auto-reset localStorage jika versi catalog berubah
+(function resetIfOutdated() {
+  const storedVersion = localStorage.getItem("sn_catalog_version");
+  if (storedVersion !== CATALOG_VERSION) {
+    localStorage.removeItem("sn_menu_catalog");
+    localStorage.setItem("sn_catalog_version", CATALOG_VERSION);
+    console.log("[Catalog] Data lama dihapus, menggunakan harga terbaru.");
+  }
+})();
 
 // Default Catalog Fallback
 const FULL_CATALOG_DATA = [
-  { id: "es-jeruk-ori", title: "Es Jeruk Peras Original", category: "Sruput Juice", price: 15000, stock: "Tersedia", badge: "Best Seller", badgeType: "tag-corner-bestseller", image: "images/es_jeruk.png", description: "100% murni perasan jeruk asli tanpa gula buatan." },
-  { id: "gourmet-salad", title: "Gourmet Salad Bowl", category: "Nyam Salad", price: 35000, stock: "Tersedia", badge: "Organic", badgeType: "tag-corner-vegan", image: "images/salad.png", description: "Sayuran hidroponik segar dengan pilihan dressing premium." },
-  { id: "combo-ayam", title: "Paket Combo Ayam", category: "Paket Combo", price: 45000, stock: "Tersedia", badge: "Hemat Rp 5.000", badgeType: "tag-corner-save", image: "images/combo.png", description: "Penyatuan sempurna: 1 Es Jeruk Peras + 1 Gourmet Salad Bowl." },
-  { id: "kopi-aren", title: "Es Kopi Susu Aren", category: "Sruput Beverage", price: 20000, stock: "Tersedia", badge: null, image: "images/mango.png", description: "Kopi susu gula aren kekinian dengan cita rasa gurih legit." },
-  { id: "tahu-cabe-garam", title: "Tahu Cabe Garam", category: "Nyam Salad", price: 18000, stock: "Tersedia", badge: null, image: "images/watermelon.png", description: "Tahu renyah dengan taburan cabe garam pedas gurih." },
-  { id: "mango-juice", title: "Mango Juice", category: "Sruput Juice", price: 28000, stock: "Tersedia", badge: "Best Seller", badgeType: "tag-corner-bestseller", image: "images/mango.png", description: "Mangga harum manis segar dipadu dengan sentuhan jeruk nipis." },
-  { id: "watermelon-juice", title: "Watermelon Juice", category: "Sruput Juice", price: 25000, stock: "Tersedia", badge: null, image: "images/watermelon.png", description: "Jus semangka murni tanpa gula tambahan, 100% menyegarkan." }
+  { id: "es-jeruk-ori", title: "Es Jeruk Peras Original", category: "Sruput Juice", price: 7000, stock: "Tersedia", badge: "Best Seller", badgeType: "tag-corner-bestseller", image: "images/es_jeruk.png", description: "100% murni perasan jeruk asli tanpa gula buatan." },
+  { id: "gourmet-salad", title: "Salad Buah Segar", category: "Nyam Salad", price: 8000, stock: "Tersedia", badge: "Organic", badgeType: "tag-corner-vegan", image: "images/fruit_salad.png", description: "Stroberi, mangga, kiwi & dressing keju lumer." },
+  { id: "combo-ayam", title: "Paket Bundling Promo", category: "Paket Combo", price: 14000, stock: "Tersedia", badge: "Promo Bundling", badgeType: "tag-corner-save", image: "images/combo.png", description: "Paket hemat: 1 Es Jeruk Peras + 1 Salad Buah Segar hanya 14k!" }
 ];
+
+
 
 // Dynamic Catalog Getter (reads from Admin sn_menu_catalog)
 function getCatalogData() {

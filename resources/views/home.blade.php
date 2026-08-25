@@ -161,15 +161,15 @@
       <div class="container">
         <div class="combo-banner-card">
           <div class="combo-banner-text">
-            <span class="tag-badge-pill tag-combo-save"><i class="fa-solid fa-tag"></i> Promo Spesial Combo</span>
-            <h2 class="combo-title">Paket Combo Sruput & Nyam</h2>
-            <p class="combo-desc">Perpaduan sempurna 1x Es Jeruk Peras Original dingin segar + 1x Gourmet Salad Bowl sehat. Solusi lengkap makan siang bergizi!</p>
+            <span class="tag-badge-pill tag-combo-save"><i class="fa-solid fa-tag"></i> Promo Bundling</span>
+            <h2 class="combo-title">Paket Bundling Promo</h2>
+            <p class="combo-desc">Perpaduan sempurna 1x Es Jeruk Peras Original dingin segar + 1x Salad Buah Segar. Hemat & bergizi hanya 14k!</p>
             <div class="combo-price-row">
-              <span class="price-strike-lg">Rp 50.000</span>
-              <span class="price-main-lg">Rp 45.000</span>
+              <span class="price-strike-lg">Rp 15.000</span>
+              <span class="price-main-lg">Rp 14.000</span>
             </div>
             <button class="btn-solid-brown" onclick="openCustomModal('combo-ayam')">
-              Pesan Paket Combo Ini
+              Pesan Paket Bundling Ini
             </button>
           </div>
           <div class="combo-banner-img">
