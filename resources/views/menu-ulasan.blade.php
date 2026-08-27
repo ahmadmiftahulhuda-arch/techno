@@ -657,23 +657,28 @@
         <p style="font-size: 0.85rem; color: var(--text-muted);">DANA Merchant Trans ID: <strong id="paymentOrderId" style="color: var(--text-main); font-family: monospace; font-size: 0.95rem;">DANA-SN-892103</strong></p>
         <h3 style="font-size: 1.85rem; color: #118EEA; margin: 0.25rem 0 1rem; font-family: 'Outfit', sans-serif;" id="paymentAmount">Rp 70.000</h3>
 
-        <div style="background: #FFFFFF; padding: 1.25rem; border-radius: 20px; display: inline-block; border: 2px solid #118EEA; margin-bottom: 1.25rem; position: relative; box-shadow: 0 8px 24px rgba(17, 142, 234, 0.15);">
-          <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: #118EEA; color: #FFF; padding: 0.3rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; margin-bottom: 0.85rem;">
-            <span>DANA</span>
+        <div style="background: #FFFFFF; padding: 1.25rem; border-radius: 20px; display: inline-block; border: 2px solid #118EEA; margin-bottom: 0.75rem; position: relative; box-shadow: 0 8px 24px rgba(17, 142, 234, 0.15);">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: #118EEA; color: #FFF; padding: 0.3rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; margin-bottom: 0.75rem;">
+            <span>FRESHORA</span>
             <span style="opacity: 0.5;">|</span>
             <span>QRIS NATIONAL</span>
           </div>
-          <br>
-          <i class="fa-solid fa-qrcode" style="font-size: 8.5rem; color: #0F172A;"></i>
-          <p style="font-size: 0.78rem; color: #0369A1; margin-top: 0.6rem; font-weight: 600;">Buka Aplikasi DANA / Mobile Banking -> Scan QRIS Ini</p>
+          <img src="{{ asset('images/qris-freshora.jpg') }}" alt="QRIS Freshora" style="width: 210px; height: 210px; object-fit: contain; display: block; margin: 0 auto;">
+          <p style="font-size: 0.78rem; color: #0369A1; margin-top: 0.5rem; font-weight: 600;">Buka Aplikasi Apapun Berlogo QRIS &rarr; Scan &rarr; Bayar</p>
+        </div>
+
+        <div style="background: #FFF7ED; border: 1px solid #FED7AA; padding: 0.65rem 0.9rem; border-radius: 12px; margin-bottom: 0.9rem; text-align: left;">
+          <p style="font-size: 0.78rem; color: #92400E; font-weight: 700; margin: 0 0 0.2rem;">&#9888; Masukkan nominal yang tepat saat scan:</p>
+          <p style="font-size: 1rem; color: #B45309; font-weight: 800; margin: 0;" id="qrisNominalHint">Rp 0</p>
+          <p style="font-size: 0.72rem; color: #A16207; margin: 0.2rem 0 0;">NMID: ID1026576177954 &bull; Berlaku untuk semua e-wallet &amp; m-banking</p>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-          <button class="btn-solid-brown-large" style="background: linear-gradient(135deg, #118EEA, #0E73BE);" onclick="simulatePaymentSuccess()">
-            <i class="fa-solid fa-circle-check"></i> Simulasi DANA Webhook Lunas
+          <button class="btn-solid-brown-large" style="background: linear-gradient(135deg, #25D366, #1DB954);" onclick="konfirmasiViaWA()">
+            <i class="fa-brands fa-whatsapp"></i> Sudah Bayar? Konfirmasi via WhatsApp
           </button>
           <button class="btn-outline-pill" style="width: 100%; min-width: auto; padding: 0.65rem; font-size: 0.85rem;" onclick="copyTransactionCode()">
-            <i class="fa-regular fa-copy"></i> Salin DANA Trans ID
+            <i class="fa-regular fa-copy"></i> Salin Kode Pesanan
           </button>
         </div>
 

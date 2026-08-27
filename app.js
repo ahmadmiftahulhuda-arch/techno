@@ -607,15 +607,18 @@ function triggerCheckoutPayment() {
   openPaymentModal(currentPaymentOrderId, total);
 }
 
-// DYNAMIC QRIS & COUNTDOWN TIMER ENGINE
+// QRIS FRESHORA - PAYMENT MODAL ENGINE
 function openPaymentModal(orderId, total) {
   currentPaymentOrderId = orderId;
   const orderIdEl = document.getElementById("paymentOrderId");
-  const amountEl = document.getElementById("paymentAmount");
-  if (orderIdEl) orderIdEl.innerText = orderId;
-  if (amountEl) amountEl.innerText = `Rp ${total.toLocaleString("id-ID")}`;
-  document.getElementById("paymentModal")?.classList.add("active");
+  const amountEl  = document.getElementById("paymentAmount");
+  const hintEl    = document.getElementById("qrisNominalHint");
 
+  if (orderIdEl) orderIdEl.innerText = orderId;
+  if (amountEl)  amountEl.innerText  = `Rp ${total.toLocaleString("id-ID")}`;
+  if (hintEl)    hintEl.innerText    = `Rp ${total.toLocaleString("id-ID")}`;
+
+  document.getElementById("paymentModal")?.classList.add("active");
   startPaymentCountdown(15 * 60);
 }
 
@@ -647,54 +650,93 @@ function closePaymentModal() {
 
 function copyTransactionCode() {
   navigator.clipboard.writeText(currentPaymentOrderId).then(() => {
-    showToast(`Kode Transaksi ${currentPaymentOrderId} berhasil disalin!`);
+    showToast(`Kode Pesanan ${currentPaymentOrderId} berhasil disalin!`);
   }).catch(() => {
-    showToast(`Kode Transaksi: ${currentPaymentOrderId}`);
+    showToast(`Kode Pesanan: ${currentPaymentOrderId}`);
   });
 }
 
-// SIMULATE PAYMENT & PUSH ORDER TO ADMIN PERSISTENT ORDERS LIST
-function simulatePaymentSuccess() {
-  showToast("Pembayaran QRIS Berhasil! Webhook menerima notifikasi LUNAS.");
-  closePaymentModal();
+// KONFIRMASI PEMBAYARAN VIA WHATSAPP - FRESHORA QRIS
+function konfirmasiViaWA() {
+  const orderId  = currentPaymentOrderId;
+  const amountEl = document.getElementById("paymentAmount");
+  const amount   = amountEl ? amountEl.innerText : "Rp 0";
+  const customerName = document.getElementById("checkNameVal")?.value || "Pelanggan";
+  const phone        = document.getElementById("checkPhoneVal")?.value || "";
 
-  const step2 = document.getElementById("step2");
-  const line1 = document.getElementById("line1");
-  if (step2) step2.classList.add("active", "completed");
-  if (line1) line1.classList.add("completed");
+  // Buat item list dari keranjang
+  const itemList = cart.map(i => `  - ${i.quantity}x ${i.title} (Rp ${(i.unitPrice * i.quantity).toLocaleString("id-ID")})`).join("\n");
 
+  const msg = [
+    `Halo Freshora! Saya sudah melakukan pembayaran QRIS.`,
+    ``,
+    `*Detail Pesanan:*`,
+    `Kode: *${orderId}*`,
+    `Nama: ${customerName}${phone ? " (" + phone + ")" : ""}`,
+    `Total Dibayar: *${amount}*`,
+    ``,
+    `*Item Pesanan:*`,
+    itemList || "  (data item tidak tersedia)",
+    ``,
+    `Mohon segera dikonfirmasi. Terima kasih! 🙏`
+  ].join("\n");
+
+  // Buka WhatsApp dengan pesan otomatis
+  const waNumber = "6285246966228";
+  window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, "_blank");
+
+  // Kirim pesanan ke antrian admin (status: Menunggu Konfirmasi)
+  _pushOrderToAdmin("QRIS - Menunggu Konfirmasi");
+
+  showToast("WhatsApp dibuka! Kirim bukti bayar ke Freshora.");
+}
+
+// PUSH ORDER KE ADMIN PANEL (status dapat dikustomisasi)
+function _pushOrderToAdmin(statusLabel) {
   const customerName = document.getElementById("checkNameVal")?.value || "Pelanggan Online";
-  const phone = document.getElementById("checkPhoneVal")?.value || "";
-  const subtotal = cart.reduce((acc, i) => acc + (i.unitPrice * i.quantity), 0);
-  const total = Math.max(0, subtotal + 10000 - (subtotal * discountRate));
+  const phone        = document.getElementById("checkPhoneVal")?.value || "";
+  const subtotal     = cart.reduce((acc, i) => acc + (i.unitPrice * i.quantity), 0);
+  const total        = Math.max(0, subtotal + 10000 - (subtotal * discountRate));
 
   const newOrder = {
-    id: currentPaymentOrderId,
-    customer: `${customerName}${phone ? ' (' + phone + ')' : ''}`,
-    items: cart.map(i => ({ name: `${i.quantity}x ${i.title}`, price: i.unitPrice * i.quantity })),
-    total: total,
-    method: "QRIS",
-    status: "Diproses",
-    time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) + " WIB"
+    id:       currentPaymentOrderId,
+    customer: `${customerName}${phone ? " (" + phone + ")" : ""}`,
+    items:    cart.map(i => ({ name: `${i.quantity}x ${i.title}`, price: i.unitPrice * i.quantity })),
+    total:    total,
+    method:   "QRIS Freshora",
+    status:   statusLabel || "Menunggu Konfirmasi",
+    time:     new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) + " WIB"
   };
 
-  // Push order directly into Admin sn_orders_list in localStorage
   try {
     let existingOrders = JSON.parse(localStorage.getItem("sn_orders_list") || "[]");
     existingOrders.unshift(newOrder);
     localStorage.setItem("sn_orders_list", JSON.stringify(existingOrders));
     window.dispatchEvent(new Event("storage"));
   } catch (e) {
-    console.error("Error saving new order to storage:", e);
+    console.error("Error saving order to storage:", e);
   }
 
-  // Clear cart
+  // Update step tracker UI
+  const step2 = document.getElementById("step2");
+  const line1 = document.getElementById("line1");
+  if (step2) step2.classList.add("active", "completed");
+  if (line1) line1.classList.add("completed");
+
+  // Tutup modal & kosongkan keranjang
+  closePaymentModal();
   cart = [];
   updateCartUI();
 
   setTimeout(() => {
-    showToast("Pesanan kamu otomatis dikirim ke Dapur (Mode Dapur / Admin KDS)!");
+    showToast("Pesanan dikirim ke Dapur! Tunggu konfirmasi dari Freshora.");
   }, 1500);
+}
+
+// Tetap sediakan simulatePaymentSuccess untuk keperluan dev/testing internal
+function simulatePaymentSuccess() {
+  showToast("[DEV] Simulasi pembayaran berhasil.");
+  _pushOrderToAdmin("Diproses");
 }
 
 // Review Submission
