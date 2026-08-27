@@ -1,8 +1,24 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="Pesan Es Jeruk Peras Segar, Salad Buah Organik, dan Paket Combo Hemat dari Freshora. Bayar QRIS, konfirmasi mudah. Segar, Sehat, Terjangkau.">
+  <meta name="keywords" content="es jeruk peras, salad buah segar, minuman sehat, jus buah, freshora, sruput nyam, pesan makanan online">
+  <meta name="author" content="Freshora">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#8C3B00">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Freshora - Es Jeruk &amp; Gourmet Salad Segar">
+  <meta property="og:description" content="Pesan minuman segar dan salad organik terbaik. Bayar QRIS, langsung diproses dapur!">
+  <meta property="og:image" content="images/logo.png">
+  <meta property="og:locale" content="id_ID">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Freshora - Es Jeruk &amp; Gourmet Salad">
+  <meta name="twitter:description" content="Pesan minuman segar dan salad organik terbaik. Bayar QRIS!">
+  <meta name="twitter:image" content="images/logo.png">
   <title>Sruput & Nyam - Es Jeruk Peras & Gourmet Salad Organik</title>
   
   <!-- Google Fonts -->
@@ -170,7 +186,7 @@
               <span class="price-strike-lg">Rp 15.000</span>
               <span class="price-main-lg">Rp 14.000</span>
             </div>
-            <button class="btn-solid-brown" onclick="openCustomModal('combo-ayam')">
+            <button class="btn-solid-brown" onclick="addDirectToCart('combo-ayam')">
               Pesan Paket Bundling Ini
             </button>
           </div>
@@ -402,8 +418,7 @@
                 </div>
                 <div class="stepper-line" id="line2"></div>
                 <div class="stepper-step" id="step3">
-                  <div class="step-circle"><i class="fa-solid fa-truck"></i></div>
-                  <span class="step-label">Pengiriman</span>
+                  <div class="step-circle"><i class="fa-solid fa-bell-concierge"></i></div><span class="step-label">Siap</span>
                 </div>
                 <div class="stepper-line" id="line3"></div>
                 <div class="stepper-step" id="step4">
@@ -413,27 +428,17 @@
               </div>
             </div>
 
-            <!-- Address Form -->
+            <!-- Customer Info Form -->
             <div class="checkout-card-box">
-              <h4 class="card-box-title">Alamat Pengiriman</h4>
-              <div class="map-view-container">
-                <div class="map-pin-badge">
-                  <i class="fa-solid fa-location-dot" style="color: #8C3B00;"></i>
-                  <span>Jl. Sudirman No. 45, Jakarta Selatan</span>
-                </div>
-              </div>
-              <div class="form-group-clean mb-3">
-                <label class="input-label-sm">Detail Alamat</label>
-                <textarea id="checkAddressDetail" class="input-clean-box" rows="2" placeholder="Contoh: Gedung A, Lantai 3..."></textarea>
-              </div>
+              <h4 class="card-box-title">Informasi Pemesan</h4>
               <div class="form-row-2col">
                 <div class="form-group-clean">
-                  <label class="input-label-sm">Nama Penerima</label>
-                  <input type="text" id="checkNameVal" class="input-clean-box" value="Budi Santoso">
+                  <label class="input-label-sm">Nama Pemesan</label>
+                  <input type="text" id="checkNameVal" class="input-clean-box" placeholder="Masukkan nama Anda" value="">
                 </div>
                 <div class="form-group-clean">
-                  <label class="input-label-sm">No. Telepon</label>
-                  <input type="tel" id="checkPhoneVal" class="input-clean-box" value="08123456789">
+                  <label class="input-label-sm">No. WhatsApp / HP</label>
+                  <input type="tel" id="checkPhoneVal" class="input-clean-box" placeholder="Contoh: 08xxxxxxxxxx" value="">
                 </div>
               </div>
             </div>
@@ -473,7 +478,6 @@
               <div id="checkoutSummaryItemsList"></div>
               <div class="summary-price-calc-box">
                 <div class="calc-row"><span>Subtotal</span><span id="checkoutSubtotal">Rp 0</span></div>
-                <div class="calc-row"><span>Ongkos Kirim</span><span id="checkoutShipping">Rp 10.000</span></div>
                 <div class="calc-row total-calc-row">
                   <span>Total</span>
                   <span class="total-big-val" id="checkoutTotal">Rp 10.000</span>
@@ -553,59 +557,96 @@
     </div>
   </div>
 
-  <!-- MODAL 4: DANA DIRECT QRIS MODAL (DANA BLUE BRANDING & MERCHANT ID) -->
+    <!-- MODAL 4: QRIS FRESHORA PAYMENT MODAL -->
   <div class="modal-overlay" id="paymentModal">
-    <div class="modal-card" style="max-width: 450px; text-align: center;">
+    <div class="modal-card" style="max-width: 460px; text-align: center;">
       
-      <!-- DANA Branded Header -->
+      <!-- Modal Header -->
       <div class="modal-header-sticky" style="background: #118EEA; color: #FFF;">
-        <h3 class="modal-title" style="color: #FFF;"><i class="fa-solid fa-wallet"></i> DANA Direct QRIS</h3>
+        <h3 class="modal-title" style="color: #FFF;"><i class="fa-solid fa-qrcode"></i> Pembayaran QRIS Freshora</h3>
         <button class="btn-close-modal" style="background: rgba(255,255,255,0.2); color: #FFF;" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="modal-body-wrapper" style="padding: 1.25rem;">
         
         <!-- Timer Box -->
-        <div style="background: #F0F9FF; border: 1px solid #BAE6FD; padding: 0.75rem 1rem; border-radius: 14px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+        <div style="background: #F0F9FF; border: 1px solid #BAE6FD; padding: 0.75rem 1rem; border-radius: 14px; margin-bottom: 0.85rem; display: flex; align-items: center; justify-content: space-between;">
           <div style="text-align: left;">
-            <p style="font-size: 0.75rem; color: #0369A1; font-weight: 600;">Selesaikan Pembayaran DANA:</p>
-            <span style="font-size: 0.72rem; color: #0284C7;">Merchant: Sruput & Nyam Official</span>
+            <p style="font-size: 0.75rem; color: #0369A1; font-weight: 700; margin: 0;">Selesaikan Pembayaran:</p>
+            <span style="font-size: 0.72rem; color: #0284C7;">Merchant: Freshora &bull; NMID: ID1026576177954</span>
           </div>
-          <h2 style="color: #118EEA; font-size: 1.6rem; font-family: 'Outfit', sans-serif;" id="payCountdown">14:59</h2>
+          <h2 style="color: #118EEA; font-size: 1.6rem; font-family: 'Outfit', sans-serif; margin: 0;" id="payCountdown">14:59</h2>
         </div>
         
-        <p style="font-size: 0.85rem; color: var(--text-muted);">DANA Merchant Trans ID: <strong id="paymentOrderId" style="color: var(--text-main); font-family: monospace; font-size: 0.95rem;">DANA-SN-892103</strong></p>
-        <h3 style="font-size: 1.85rem; color: #118EEA; margin: 0.25rem 0 1rem; font-family: 'Outfit', sans-serif;" id="paymentAmount">Rp 70.000</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">Kode Pesanan: <strong id="paymentOrderId" style="color: var(--text-main); font-family: monospace; font-size: 0.95rem;">SN-892103</strong></p>
+        
+        <!-- Nominal Box with Copy Button -->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.85rem;">
+          <h3 style="font-size: 1.95rem; color: #118EEA; margin: 0; font-family: 'Outfit', sans-serif;" id="paymentAmount">Rp 14.000</h3>
+          <button type="button" onclick="copyPaymentAmount()" title="Salin Angka Nominal" style="background: #E0F2FE; color: #0284C7; border: 1px solid #BAE6FD; border-radius: 8px; padding: 0.35rem 0.65rem; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.3rem;">
+            <i class="fa-regular fa-copy"></i> Salin
+          </button>
+        </div>
 
-        <!-- QRIS Freshora Real Display Box -->
-        <div style="background: #FFFFFF; padding: 1.25rem; border-radius: 20px; display: inline-block; border: 2px solid #118EEA; margin-bottom: 0.75rem; position: relative; box-shadow: 0 8px 24px rgba(17, 142, 234, 0.15);">
-          <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: #118EEA; color: #FFF; padding: 0.3rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; margin-bottom: 0.75rem;">
+        <!-- High-Res Focused QR Display Box -->
+        <div style="background: #FFFFFF; padding: 1rem 1.25rem 1.15rem; border-radius: 20px; display: inline-block; border: 2px solid #118EEA; margin-bottom: 0.75rem; position: relative; box-shadow: 0 8px 24px rgba(17, 142, 234, 0.15); width: 100%; max-width: 320px;">
+          
+          <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: #118EEA; color: #FFF; padding: 0.3rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; margin-bottom: 0.65rem;">
             <span>FRESHORA</span>
             <span style="opacity: 0.5;">|</span>
             <span>QRIS NATIONAL</span>
           </div>
-          <img src="{{ asset('images/qris-freshora.jpg') }}" alt="QRIS Freshora - Satu QRIS Untuk Semua" style="width: 210px; height: 210px; object-fit: contain; display: block; margin: 0 auto;">
-          <p style="font-size: 0.78rem; color: #0369A1; margin-top: 0.5rem; font-weight: 600;">Buka Aplikasi Apapun Berlogo QRIS &rarr; Scan &rarr; Bayar</p>
+          
+          <!-- Focused Barcode Image (Large & Crisp) -->
+          <div style="position: relative; cursor: pointer;" onclick="openQrLightbox()" title="Klik untuk perbesar QR">
+            <img src="{{ asset('images/qris-freshora-focused.jpg') }}" alt="QRIS Freshora" style="width: 100%; max-width: 260px; height: auto; object-fit: contain; display: block; margin: 0 auto; border-radius: 8px;">
+            <span style="display: inline-block; font-size: 0.7rem; color: #64748B; background: #F1F5F9; padding: 0.2rem 0.6rem; border-radius: 9999px; margin-top: 0.4rem;">
+              <i class="fa-solid fa-magnifying-glass-plus"></i> Ketuk untuk perbesar
+            </span>
+          </div>
+
+          <p style="font-size: 0.78rem; color: #0369A1; margin-top: 0.4rem; font-weight: 600;">Scan pakai DANA, GoPay, OVO, ShopeePay, BCA, dll.</p>
         </div>
 
-        <!-- Peringatan Nominal Manual -->
-        <div style="background: #FFF7ED; border: 1px solid #FED7AA; padding: 0.65rem 0.9rem; border-radius: 12px; margin-bottom: 0.9rem; text-align: left;">
-          <p style="font-size: 0.78rem; color: #92400E; font-weight: 700; margin: 0 0 0.2rem;">&#9888; Masukkan nominal yang tepat saat scan:</p>
-          <p style="font-size: 1rem; color: #B45309; font-weight: 800; margin: 0;" id="qrisNominalHint">Rp 0</p>
-          <p style="font-size: 0.72rem; color: #A16207; margin: 0.2rem 0 0;">NMID: ID1026576177954 &bull; Berlaku untuk semua e-wallet &amp; m-banking</p>
+        <!-- Peringatan & Tips HP / Desktop -->
+        <div style="background: #FFF7ED; border: 1px solid #FED7AA; padding: 0.65rem 0.85rem; border-radius: 12px; margin-bottom: 0.85rem; text-align: left;">
+          <p style="font-size: 0.78rem; color: #92400E; font-weight: 700; margin: 0 0 0.15rem;">
+            &#9888; Masukkan nominal: <strong id="qrisNominalHint" style="color: #B45309; font-size: 0.88rem;">Rp 0</strong>
+          </p>
+          <p style="font-size: 0.72rem; color: #A16207; margin: 0;">
+            <strong>Tips di HP:</strong> Unduh QRIS di bawah &rarr; Buka DANA &rarr; Pilih menu QRIS &rarr; <em>Scan dari Galeri Foto</em>.
+          </p>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <!-- Action Buttons -->
+        <div style="display: flex; flex-direction: column; gap: 0.65rem;">
           <button class="btn-solid-brown-large" style="background: linear-gradient(135deg, #25D366, #1DB954);" onclick="konfirmasiViaWA()">
             <i class="fa-brands fa-whatsapp"></i> Sudah Bayar? Konfirmasi via WhatsApp
           </button>
-          <button class="btn-outline-pill" style="width: 100%; min-width: auto; padding: 0.65rem; font-size: 0.85rem;" onclick="copyTransactionCode()">
-            <i class="fa-regular fa-copy"></i> Salin Kode Pesanan
-          </button>
+          
+          <div style="display: flex; gap: 0.5rem;">
+            <a href="{{ asset('images/qris-freshora.jpg') }}" download="QRIS-Freshora-ID1026576177954.jpg') }}" class="btn-outline-pill" style="flex: 1; min-width: auto; padding: 0.65rem 0.5rem; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; text-decoration: none;" title="Simpan gambar untuk scan dari galeri">
+              <i class="fa-solid fa-download"></i> Simpan QRIS
+            </a>
+            <button class="btn-outline-pill" style="flex: 1; min-width: auto; padding: 0.65rem 0.5rem; font-size: 0.82rem;" onclick="copyTransactionCode()">
+              <i class="fa-regular fa-copy"></i> Salin Kode ID
+            </button>
+          </div>
         </div>
 
       </div>
     </div>
+  </div>
+
+  <!-- LIGHTBOX MODAL: FULLSCREEN QR ZOOM -->
+  <div class="modal-overlay" id="qrLightboxModal" onclick="closeQrLightbox()" style="z-index: 1100; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; padding: 1rem;">
+    <div style="background: #FFF; padding: 1.5rem; border-radius: 20px; max-width: 90vw; max-height: 90vh; text-align: center; position: relative;" onclick="event.stopPropagation()">
+      <button onclick="closeQrLightbox()" style="position: absolute; top: 10px; right: 10px; background: #E2E8F0; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 1rem;"><i class="fa-solid fa-xmark"></i></button>
+      <h4 style="color: #0F172A; margin: 0 0 0.75rem; font-family: 'Outfit', sans-serif;">QRIS Freshora (NMID: ID1026576177954)</h4>
+      <img src="{{ asset('images/qris-freshora.jpg') }}" alt="QRIS Freshora Full" style="max-width: 100%; max-height: 70vh; object-fit: contain; border-radius: 12px;">
+      <p style="font-size: 0.8rem; color: #64748B; margin: 0.75rem 0 0;">Scan langsung menggunakan aplikasi pembayaran Anda</p>
+    </div>
+  </div>
   </div>
 
   <!-- CART DRAWER SIDEBAR -->
@@ -630,7 +671,6 @@
 
       <div class="cart-summary-box">
         <div class="summary-line"><span>Subtotal</span><span id="cartSubtotal">Rp 0</span></div>
-        <div class="summary-line"><span>Ongkos Kirim</span><span id="cartShipping">Rp 10.000</span></div>
         <div class="summary-line discount-line"><span>Diskon</span><span id="cartDiscount">- Rp 0</span></div>
         <div class="summary-line total-line"><span>Total</span><span id="cartTotal" class="total-price-text">Rp 10.000</span></div>
       </div>

@@ -4,13 +4,11 @@
    Shared Data Persistence via LocalStorage & Dynamic Real-time KPI Calculation
    ========================================================================== */
 
-// --- DEFAULT INITIAL DATA STRUCTURES ---
+// --- DEFAULT INITIAL DATA STRUCTURES (3 MENU ASLI FRESHORA) ---
 const DEFAULT_MENU_CATALOG = [
-  { id: "es-jeruk-ori", name: "Es Jeruk Peras Original", category: "Sruput Juice", price: 15000, stock: "Tersedia", sales: 180, image: "images/es_jeruk.png" },
-  { id: "gourmet-salad", name: "Gourmet Salad Bowl", category: "Nyam Salad", price: 35000, stock: "Tersedia", sales: 145, image: "images/salad.png" },
-  { id: "combo-ayam", name: "Paket Combo Ayam", category: "Paket Combo", price: 45000, stock: "Tersedia", sales: 112, image: "images/combo.png" },
-  { id: "kopi-aren", name: "Es Kopi Susu Aren", category: "Sruput Beverage", price: 20000, stock: "Tersedia", sales: 89, image: "images/mango.png" },
-  { id: "tahu-cabe-garam", name: "Tahu Cabe Garam", category: "Nyam Salad", price: 18000, stock: "Tersedia", sales: 64, image: "images/watermelon.png" }
+  { id: "es-jeruk-ori",  name: "Es Jeruk Peras Original", category: "Sruput Juice", price: 7000,  stock: "Tersedia", sales: 180, image: "images/es_jeruk.png",    description: "100% murni perasan jeruk asli tanpa gula buatan." },
+  { id: "gourmet-salad", name: "Salad Buah Segar",        category: "Nyam Salad",   price: 8000,  stock: "Tersedia", sales: 145, image: "images/fruit_salad.png", description: "Stroberi, mangga, kiwi & dressing keju lumer." },
+  { id: "combo-ayam",    name: "Paket Bundling Promo",    category: "Paket Combo",  price: 14000, stock: "Tersedia", sales: 112, image: "images/combo.png",       description: "Paket hemat: 1 Es Jeruk Peras + 1 Salad Buah Segar hanya 14k!" }
 ];
 
 const DEFAULT_STAFF_LIST = [

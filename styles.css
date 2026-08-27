@@ -147,8 +147,41 @@ img { max-width: 100%; height: auto; display: block; }
 .menu-page-title { font-size: clamp(2rem, 4vw, 2.5rem); font-weight: 800; color: var(--primary-brown); margin-bottom: 0.25rem; font-family: 'Outfit', sans-serif; }
 .menu-page-subtitle { font-size: 0.92rem; color: var(--text-muted); }
 .search-box-container { position: relative; width: 320px; }
-.input-search-menu { width: 100%; padding: 0.75rem 1rem 0.75rem 2.6rem; background: #FFF; border: 1px solid #E2E8F0; border-radius: 12px; outline: none; }
-.search-icon-input { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-dim); }
+.input-search-menu {
+  width: 100%;
+  padding: 0.75rem 2.75rem 0.75rem 2.6rem;
+  background: #FFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 12px;
+  outline: none;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-main);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-search-menu:focus {
+  border-color: #118EEA;
+  box-shadow: 0 0 0 3px rgba(17, 142, 234, 0.12);
+}
+.input-search-menu::placeholder { color: var(--text-dim); }
+.search-icon-input { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-dim); font-size: 0.85rem; pointer-events: none; }
+.search-clear-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-dim);
+  padding: 0.2rem;
+  display: none;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+.search-clear-btn.visible { display: flex; align-items: center; }
+.search-clear-btn:hover { color: var(--text-main); }
+@media (max-width: 640px) { .search-box-container { width: 100%; } .menu-page-header-row { flex-direction: column; align-items: flex-start; } }
 
 /* Horizontal Touch Scroll Category Pills */
 .category-pills-row { display: flex; gap: 0.65rem; margin-bottom: 2.25rem; overflow-x: auto; padding-bottom: 0.4rem; -webkit-overflow-scrolling: touch; scrollbar-width: none; }

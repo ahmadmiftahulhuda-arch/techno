@@ -1,5 +1,5 @@
 // Catalog Version - naikkan angka ini setiap kali data catalog diubah
-const CATALOG_VERSION = "v3.0-2026-08-23";
+const CATALOG_VERSION = "v5.0-2026-08-27-original-3menus";
 
 // Auto-reset localStorage jika versi catalog berubah
 (function resetIfOutdated() {
@@ -7,15 +7,15 @@ const CATALOG_VERSION = "v3.0-2026-08-23";
   if (storedVersion !== CATALOG_VERSION) {
     localStorage.removeItem("sn_menu_catalog");
     localStorage.setItem("sn_catalog_version", CATALOG_VERSION);
-    console.log("[Catalog] Data lama dihapus, menggunakan harga terbaru.");
+    console.log("[Catalog] Data lama dihapus, menggunakan menu asli 7k, 8k, 14k.");
   }
 })();
 
-// Default Catalog Fallback
+// Default Catalog Fallback - Menu Asli Freshora (7k, 8k, 14k)
 const FULL_CATALOG_DATA = [
-  { id: "es-jeruk-ori", title: "Es Jeruk Peras Original", category: "Sruput Juice", price: 7000, stock: "Tersedia", badge: "Best Seller", badgeType: "tag-corner-bestseller", image: "images/es_jeruk.png", description: "100% murni perasan jeruk asli tanpa gula buatan." },
-  { id: "gourmet-salad", title: "Salad Buah Segar", category: "Nyam Salad", price: 8000, stock: "Tersedia", badge: "Organic", badgeType: "tag-corner-vegan", image: "images/fruit_salad.png", description: "Stroberi, mangga, kiwi & dressing keju lumer." },
-  { id: "combo-ayam", title: "Paket Bundling Promo", category: "Paket Combo", price: 14000, stock: "Tersedia", badge: "Promo Bundling", badgeType: "tag-corner-save", image: "images/combo.png", description: "Paket hemat: 1 Es Jeruk Peras + 1 Salad Buah Segar hanya 14k!" }
+  { id: "es-jeruk-ori",  title: "Es Jeruk Peras Original", category: "Sruput Juice", price: 7000,  stock: "Tersedia", badge: "Best Seller",    badgeType: "tag-corner-bestseller", image: "images/es_jeruk.png",    description: "100% murni perasan jeruk asli tanpa gula buatan." },
+  { id: "gourmet-salad", title: "Salad Buah Segar",        category: "Nyam Salad",   price: 8000,  stock: "Tersedia", badge: "Organic",        badgeType: "tag-corner-vegan",      image: "images/fruit_salad.png", description: "Stroberi, mangga, kiwi & dressing keju lumer." },
+  { id: "combo-ayam",    title: "Paket Bundling Promo",    category: "Paket Combo",  price: 14000, stock: "Tersedia", badge: "Promo Bundling", badgeType: "tag-corner-save",       image: "images/combo.png",       description: "Paket hemat: 1 Es Jeruk Peras + 1 Salad Buah Segar hanya 14k!" }
 ];
 
 
@@ -192,7 +192,7 @@ function renderFullMenuCatalog() {
             <span class="catalog-card-price">Rp ${item.price.toLocaleString("id-ID")}</span>
           </div>
           <p class="catalog-card-desc">${item.description}</p>
-          <button class="btn-add-simple" ${isOutOfStock ? 'disabled style="background: #94A3B8; cursor: not-allowed;"' : `onclick="openCustomModal('${item.id}')"`}>
+          <button class="btn-add-simple" ${isOutOfStock ? 'disabled style="background: #94A3B8; cursor: not-allowed;"' : `onclick="addDirectToCart('${item.id}')"`}>
             ${isOutOfStock ? 'Stok Habis' : '+ Tambah'}
           </button>
         </div>
@@ -210,7 +210,18 @@ function filterCategoryPill(category, el) {
 
 function filterFullMenuCatalog() {
   const input = document.getElementById("menuSearchInput");
+  const clearBtn = document.getElementById("searchClearBtn");
   currentSearchQuery = input ? input.value.trim().toLowerCase() : "";
+  if (clearBtn) clearBtn.classList.toggle("visible", currentSearchQuery.length > 0);
+  renderFullMenuCatalog();
+}
+
+function clearMenuSearch() {
+  const input = document.getElementById("menuSearchInput");
+  const clearBtn = document.getElementById("searchClearBtn");
+  if (input) { input.value = ""; input.focus(); }
+  if (clearBtn) clearBtn.classList.remove("visible");
+  currentSearchQuery = "";
   renderFullMenuCatalog();
 }
 
@@ -411,6 +422,44 @@ function updateModalCalculatedPrice() {
 
 function closeCustomModal() { document.getElementById("customModal").classList.remove("active"); }
 
+// DIRECT ADD TO CART - Langsung tambah tanpa modal opsi
+function addDirectToCart(itemId) {
+  const catalog = getCatalogData();
+  const item = catalog.find(m => m.id === itemId);
+
+  if (!item) { showToast("Produk tidak ditemukan."); return; }
+  if (item.stock === "Habis") { showToast(`Maaf, ${item.title} sedang habis!`); return; }
+
+  // Cek apakah item sudah ada di keranjang (tambah qty jika ada)
+  const existing = cart.find(i => i.id === itemId);
+  if (existing) {
+    existing.quantity += 1;
+    updateCartUI();
+    showToast(`${item.title} +1 ditambahkan!`);
+    openCartDrawer();
+    return;
+  }
+
+  const newItem = {
+    cartId:    Date.now() + Math.random(),
+    id:        item.id,
+    title:     item.title,
+    image:     item.image,
+    basePrice: item.price,
+    quantity:  1,
+    sugar:     null,
+    ice:       null,
+    dressing:  null,
+    toppings:  [],
+    unitPrice: item.price
+  };
+
+  cart.push(newItem);
+  updateCartUI();
+  showToast(`${item.title} ditambahkan ke keranjang!`);
+  openCartDrawer();
+}
+
 function confirmAddToCart() {
   if (!activeItem) return;
   let unitPrice = activeItem.price;
@@ -524,17 +573,15 @@ function applyPromoCode() {
 
 function updateCartSummary(subtotal) {
   const discountAmount = subtotal * discountRate;
-  const shippingFee = subtotal > 0 ? 10000 : 0;
-  const total = Math.max(0, subtotal - discountAmount + shippingFee);
+  const total = Math.max(0, subtotal - discountAmount);
 
   if (document.getElementById("cartSubtotal")) document.getElementById("cartSubtotal").innerText = `Rp ${subtotal.toLocaleString("id-ID")}`;
-  if (document.getElementById("cartShipping")) document.getElementById("cartShipping").innerText = `Rp ${shippingFee.toLocaleString("id-ID")}`;
   if (document.getElementById("cartDiscount")) document.getElementById("cartDiscount").innerText = `- Rp ${discountAmount.toLocaleString("id-ID")}`;
   if (document.getElementById("cartTotal")) document.getElementById("cartTotal").innerText = `Rp ${total.toLocaleString("id-ID")}`;
   if (document.getElementById("mobileCartTotal")) document.getElementById("mobileCartTotal").innerText = `Rp ${total.toLocaleString("id-ID")}`;
 }
 
-function openDemoModal() { openCustomModal("es-jeruk-ori"); }
+function openDemoModal() { addDirectToCart("es-jeruk-ori"); }
 
 // CHECKOUT MODAL HANDLERS
 function openCheckoutModal() {
@@ -568,12 +615,10 @@ function openCheckoutModal() {
     }).join('');
   }
 
-  const shippingFee = 10000;
   const discountAmount = subtotal * discountRate;
-  const total = Math.max(0, subtotal + shippingFee - discountAmount);
+  const total = Math.max(0, subtotal - discountAmount);
 
   if (document.getElementById("checkoutSubtotal")) document.getElementById("checkoutSubtotal").innerText = `Rp ${subtotal.toLocaleString("id-ID")}`;
-  if (document.getElementById("checkoutShipping")) document.getElementById("checkoutShipping").innerText = `Rp ${shippingFee.toLocaleString("id-ID")}`;
   if (document.getElementById("checkoutTotal")) document.getElementById("checkoutTotal").innerText = `Rp ${total.toLocaleString("id-ID")}`;
 
   document.getElementById("checkoutModal")?.classList.add("active");
@@ -592,24 +637,27 @@ function selectPaymentCard(type, el) {
 }
 
 function triggerCheckoutPayment() {
-  const name = document.getElementById("checkNameVal")?.value;
-  const phone = document.getElementById("checkPhoneVal")?.value;
+  const name = document.getElementById("checkNameVal")?.value?.trim();
+  const phone = document.getElementById("checkPhoneVal")?.value?.trim();
   if (!name || !phone) {
-    showToast("Harap isi nama dan nomor telepon penerima!");
+    showToast("Harap isi nama dan nomor WhatsApp pemesan!");
     return;
   }
 
   currentPaymentOrderId = "SN-" + Math.floor(100000 + Math.random() * 900000);
   const subtotal = cart.reduce((acc, i) => acc + (i.unitPrice * i.quantity), 0);
-  const total = Math.max(0, subtotal + 10000 - (subtotal * discountRate));
+  const total = Math.max(0, subtotal - (subtotal * discountRate));
 
   closeCheckoutModal();
   openPaymentModal(currentPaymentOrderId, total);
 }
 
 // QRIS FRESHORA - PAYMENT MODAL ENGINE
+let currentPaymentRawAmount = 0;
+
 function openPaymentModal(orderId, total) {
   currentPaymentOrderId = orderId;
+  currentPaymentRawAmount = total;
   const orderIdEl = document.getElementById("paymentOrderId");
   const amountEl  = document.getElementById("paymentAmount");
   const hintEl    = document.getElementById("qrisNominalHint");
@@ -646,6 +694,26 @@ function startPaymentCountdown(durationSeconds) {
 function closePaymentModal() {
   if (countdownTimerInterval) clearInterval(countdownTimerInterval);
   document.getElementById("paymentModal")?.classList.remove("active");
+}
+
+function copyPaymentAmount() {
+  const numStr = currentPaymentRawAmount ? currentPaymentRawAmount.toString() : (document.getElementById("paymentAmount")?.innerText.replace(/[^0-9]/g, '') || "0");
+  const formatted = parseInt(numStr, 10).toLocaleString("id-ID");
+  navigator.clipboard.writeText(numStr).then(() => {
+    showToast(`Nominal Rp ${formatted} berhasil disalin ke clipboard!`);
+  }).catch(() => {
+    showToast(`Nominal: Rp ${formatted}`);
+  });
+}
+
+function openQrLightbox() {
+  const lightbox = document.getElementById("qrLightboxModal");
+  if (lightbox) lightbox.classList.add("active");
+}
+
+function closeQrLightbox() {
+  const lightbox = document.getElementById("qrLightboxModal");
+  if (lightbox) lightbox.classList.remove("active");
 }
 
 function copyTransactionCode() {
@@ -696,7 +764,7 @@ function _pushOrderToAdmin(statusLabel) {
   const customerName = document.getElementById("checkNameVal")?.value || "Pelanggan Online";
   const phone        = document.getElementById("checkPhoneVal")?.value || "";
   const subtotal     = cart.reduce((acc, i) => acc + (i.unitPrice * i.quantity), 0);
-  const total        = Math.max(0, subtotal + 10000 - (subtotal * discountRate));
+  const total        = Math.max(0, subtotal - (subtotal * discountRate));
 
   const newOrder = {
     id:       currentPaymentOrderId,
@@ -729,8 +797,11 @@ function _pushOrderToAdmin(statusLabel) {
   updateCartUI();
 
   setTimeout(() => {
-    showToast("Pesanan dikirim ke Dapur! Tunggu konfirmasi dari Freshora.");
-  }, 1500);
+    showToast("✅ Pesanan dikirim! Estimasi siap: 15-20 menit.");
+  }, 1000);
+  setTimeout(() => {
+    showToast("📱 Freshora akan konfirmasi ke WhatsApp Anda segera.");
+  }, 3000);
 }
 
 // Tetap sediakan simulatePaymentSuccess untuk keperluan dev/testing internal
